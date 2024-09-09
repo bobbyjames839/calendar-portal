@@ -4,6 +4,7 @@
     align-items: center;
     height: 100vh;
     width: 100%;
+    background-color: var(--lightest);
 }
 
 .login_inner {
@@ -13,4 +14,57 @@
     align-items: center;
     width: 400px;
     padding: 20px;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--light);
+}
+
+.login_title {
+    font-size: 30px;
+    font-weight: 500;
+    margin-bottom: 30px;
+}
+
+.login_input {
+    width: 80%;
+    margin-bottom: 20px;
+    border: none;
+    background-color: var(--lightest);
+    box-shadow: 0 0 10px var(--light);
+    font-size: 13px;
+    color: var(--darkest);
+    border-radius: 10px;
+    padding: 12px 10px;
+    outline: none;
+    transition: .3s;
+}
+
+.login_input:hover, .login_input:focus {
+    box-shadow: 0 0 10px var(--dark);
+}
+
+.submit_login {
+    width: 200px;
+    height: 35px;
+    margin-top: 20px;
+    border: none;
+    background-color: var(--blue);
+    color: var(--lightest);
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.submit_login:hover {
+    background-color: var(--darkblue);
+}   
+
+.logo {
+    position: fixed;
+    bottom: 10px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--blue);
 }

@@ -1,0 +1,118 @@
+.calendar_nav {
+    display: flex;
+    padding-top: 15px;
+    box-sizing: border-box;
+    width: 100%;
+    justify-content: center;
+    height: 60px;
+    background-color: var(--lighter);
+    margin-bottom: 15px;
+}
+
+.select_day {
+    display: flex;
+    align-items: center;
+    height: 30px;
+    background-color: var(--lightest);
+    font-size: 13px;
+    border-radius: 5px;
+    border: 1px solid var(--light);
+    margin: 0 15px;
+    box-sizing: border-box;
+}
+
+.select_day_button {
+    width: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    cursor: pointer;
+}
+
+.select_day_button_right {
+    border-left: 1px solid var(--light);
+}
+
+.select_day_button_left {
+    border-right: 1px solid var(--light);
+}   
+
+.selected_day {
+    font-weight: 500;
+    width: 180px;
+    background-color: var(--lightest);
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.view_calendar {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+    width: 30px;
+    background-color: var(--lightest);
+    border-radius: 5px;
+    border: 1px solid var(--light);
+    cursor: pointer;
+}
+
+.select_preview {
+    display: flex;
+    flex-direction: column;
+    width: 250px;
+    background-color: var(--lightest);
+    padding: 0 10px;
+    box-sizing: border-box;
+    border-radius: 5px;
+    border: 1px solid var(--light);
+    height: 30px;
+    z-index: 5;
+    overflow: hidden;
+    transition: .3s ease-in-out;
+}
+
+.select_preview_top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 30px;
+    width: 100%;
+    flex-shrink: 0;
+}
+
+.select_preview_expanded {
+    height: 170px;
+}
+
+.select_preview_text {
+    font-weight: 500;
+    font-size: 13px;
+}
+
+.select_preview_text_bottom {
+    font-size: 12px;
+    padding: 3px 10px;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 3px;
+    cursor: pointer;
+}
+
+.select_preview_dropdown {
+    cursor: pointer;
+    font-size: 18px;
+}
+
+.selected_ptb {
+    background-color: var(--lightblue);
+}
+
+.disabled_chevron_left {
+    color: var(--light);
+}

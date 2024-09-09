@@ -5,3 +5,26 @@
   padding: 0;
   font-family: 'Poppins', sans-serif;
 }
+
+.App {
+  color: var(--darkest);
+}
+
+:root {
+  --lightest: #f9f9f9;
+  --lighter: #ebebeb;
+  --light: #c5c5c5;
+  --dark: #636363;
+  --darker: #343434;
+  --darkest: #141414;
+  --darkblue: #0909d5;
+  --lightblue: #d5f4ff;
+  --blue: #0164e6;
+  --red: #ff0000;
+
+  /* Lilac shades */
+  --lilac-blue: #b3a7f7;
+  --lilac-green: #b3f7d1;
+  --lilac-yellow: #f7f7b3;
+  --lilac-pink: #f7b3f7;
+}

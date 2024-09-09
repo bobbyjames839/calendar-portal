@@ -1,0 +1,128 @@
+.calendar_dropdown {
+    position: fixed;
+    top: 0;
+    right: 50%;
+    transform: translateX(50%);
+    padding-bottom: 10px;
+    width: 400px;
+    background-color: var(--lightest);
+    box-shadow: 0 0 10px var(--light);
+    z-index: 10;
+    animation: scrollIn .3s ease-in-out;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    transition: .3s ease-in-out;
+    border: 1px solid var(--light);
+}
+
+.calendar_dropdown_closing {
+    top: -100%;
+}
+
+@keyframes scrollIn {
+    0% {
+        transform: translate(50%, -100%); /* Combine translateX and translateY */
+    }
+    100% {
+        transform: translate(50%, 0); /* Keep translateX and animate translateY */
+    }
+}
+
+.calendar_dropdown_inner {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.calendar_dropdown_top {
+    display: flex;
+    background-color: var(--blue);
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.calendar_dropdown_month {
+    font-size: 16px;
+    color: var(--lightest);
+    font-weight: 500;
+}
+
+.calendar_dropdown_toggle_month_buttons {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 90px;
+}
+
+.calendar_dropdown_toggle_month_button {
+    background-color: var(--lightblue);
+    cursor: pointer;
+    height: 14px;
+    width: 14px;
+    padding: 6px;
+    border-radius: 5px;
+}
+
+.calendar_dropdown_toggle_month_button_lighter {
+    color: var(--light);
+}
+
+.calendar_dropdown_days_of_week {
+    display: grid;
+    grid-template-columns: repeat(7, 14.2857142857%);
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}
+
+.calendar_dropdown_day_of_week {
+    font-size: 12px;
+    color: var(--dark);
+    text-align: center;
+}
+
+.calendar_dropdown_main {
+    display: grid;
+    grid-template-columns: repeat(7, 14.2857142857%);
+    width: 100%;
+    padding: 0 20px;
+    box-sizing: border-box;
+}
+
+.calendar_dropdown_section {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.calendar_dropdown_day {
+    font-size: 14px;
+    margin: 5px 0;
+    height: 35px;
+    width: 35px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+}
+
+.calendar_dropdown_day:hover {
+    box-shadow: 0 0 10px var(--light);
+}
+
+.past_dropdown_day {
+    color: var(--light);
+    text-decoration: line-through;
+    cursor: default;
+    pointer-events: none;
+    box-shadow: none;
+}
+
+.current_dropdown_day {
+    background-color: var(--lightblue);
+}

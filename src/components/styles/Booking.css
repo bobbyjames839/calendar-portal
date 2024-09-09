@@ -1,0 +1,121 @@
+.booking {
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 0;
+    width: 300px;
+    background-color: var(--lightest);
+    box-shadow: 0 0 15px var(--dark);
+    z-index: 10;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    animation: slideIn .3s ease-in-out;
+    transition: .3s ease-in-out;
+}
+
+.booking_closing {
+    right: -300px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.booking_top {
+    width: 100%;
+    padding: 10px 15px 10px 10px;
+    background-color: var(--blue);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    border-top-left-radius: 10px;
+}
+
+.close_booking {
+    font-size: 20px;
+    cursor: pointer;
+    background-color: var(--lighter);
+    padding: 6px 8px;
+    border-radius: 5px;
+}
+
+.booking_time {
+    font-size: 12px;
+    font-weight: 300;
+    display: flex;
+    align-items: center;
+}
+
+.booking_time_inner {
+    font-weight: 600;
+    margin-right: 8px;
+}
+
+.booking_middle {
+    display: flex;
+    flex-direction: column;
+    padding: 0 15px 15px 15px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.client_info {
+    font-size: 14px;
+    font-weight: 600;
+    border-bottom: 1px solid var(--darkest);
+    margin: 15px 0 20px 0;
+}
+
+.client_info_item {
+    font-size: 12px;
+    margin-bottom: 10px;
+    background-color: var(--lighter);
+    padding: 5px 10px;
+    width: 100%;
+    box-sizing: border-box;
+    font-weight: 500;
+    border-radius: 10px;
+}
+
+.client_info_item_note {
+    max-height: 70px;
+    overflow: auto;
+}
+
+@keyframes slideIn {
+    from {
+        right: -300px;
+    }
+    to {
+        right: 0;
+    }
+}
+
+/* Add these styles in your Booking.css file */
+
+.booking_top.bobby, .booking_bottom.bobby{
+    background-color: var(--lilac-blue)
+}
+
+.booking_top.tommy, .booking_bottom.tommy {
+    background-color: var(--lilac-green);
+}
+
+.booking_top.harry, .booking_bottom.harry {
+    background-color: var(--lilac-pink);
+}
+
+.booking_top.jasmine, .booking_bottom.jasmine {
+    background-color: var(--lilac-yellow);
+}
+
+.booking_bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+    font-weight: 600;
+    border-bottom-left-radius: 10px;
+    width: 100%;
+    padding: 10px 20px;
+    box-sizing: border-box;
+}

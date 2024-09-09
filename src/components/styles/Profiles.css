@@ -1,0 +1,28 @@
+.profiles {
+    width: calc(90% - 50px);
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin: 10px 0;
+    box-sizing: border-box;
+    margin-left: 40px;
+}
+
+.profile_div {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.profile_pic {
+    height: 50px;
+    width: 50px;
+    object-fit: cover;
+    border-radius: 100px;
+    border: 1px solid var(--light);
+}
+
+.profile_tag {
+    font-size: 12px;
+    font-weight: 500;
+}

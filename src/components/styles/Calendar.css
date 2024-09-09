@@ -1,0 +1,117 @@
+.calendar {
+    display: flex;
+    width: 90%;
+    margin-bottom: 100px;
+    align-items: center;
+    height: 820px;
+}
+
+.calendar_times {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 40px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    height: 820px;
+    font-size: 12px;
+}
+
+.calendar_main {
+    display: flex;
+    width: calc(100% - 40px);
+    height: 800px;
+    position: relative;
+    border: .5px solid var(--lighter);
+}
+
+.calendar_section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 25%;
+    padding: 0 5px;
+    box-sizing: border-box;
+    border: .5px solid var(--lighter);
+}
+
+.calendar_time_inner {
+    height: 20px;
+    margin: 2.5px 0;
+    width: 100%;
+    z-index: 2;
+    font-size: 11px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 5px 0 10px;
+    box-sizing: border-box; 
+    position: relative;   
+}
+
+.booked-Bobby, .booked-Tommy, .booked-Jasmine, .booked-Harry {
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.booked-Bobby {
+    background-color: var(--lilac-blue);
+}
+
+.booked-Tommy {
+    background-color: var(--lilac-green);
+}
+
+.booked-Jasmine {
+    background-color: var(--lilac-yellow);
+}
+
+.booked-Harry {
+    background-color: var(--lilac-pink);
+}
+
+.booked_top {
+    margin: 2.5px 0 0 0;
+    border-radius: 10px 10px 0 0;
+    height: 22.5px;
+}
+
+.booked_middle {
+    margin: 0;
+    border-radius: 0;
+    height: 25px;
+}
+
+.booked_bottom {
+    margin: 0 0 2.5px 0;
+    border-radius: 0 0 10px 10px;   
+    height: 22.5px;
+}
+
+.hour_span {
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    background-color: var(--light);
+}
+
+.note_indicator {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 15px solid transparent;
+    border-top: 15px solid var(--blue);
+    border-top-right-radius: 3px;
+}
+
+
+
+
+
+
+
+
