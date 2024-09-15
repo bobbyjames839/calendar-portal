@@ -4,7 +4,6 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from 'react-router-dom';
 
 export const Nav = () => {
-
     const navigate = useNavigate();
 
     return (
