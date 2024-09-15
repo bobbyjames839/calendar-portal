@@ -1,11 +1,13 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import '../styles/Calendar.css';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/Firebase.js';
+import { Booking } from './Booking.js';
 
-export const Calendar = ({ currentDate, setBooking, previewItem }) => {
+export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, handleCalendarUpdate }) => {
     const employees = ['Bobby', 'Tommy', 'Jasmine', 'Harry'];
     const queryIdRef = useRef(0);
+    const [booking, setBooking] = useState(null);
 
     const getFormattedDateString = (date) => {
         return date.toDateString();
@@ -22,11 +24,10 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
                 slot.classList.remove('booked_bottom');
                 slot.innerText = '';
                 slot.removeAttribute('title');
-                slot.onclick = null; 
+                slot.onclick = null;
             });
         });
     };
-    
 
     const formatTime = (time) => {
         const hours = Math.floor(time);
@@ -46,118 +47,110 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
         return `${hours}:${minutes}`;
     };
 
-    const colorTimeSlots = (startTime, endTime, employee, firstName, lastName, email, number, note, price, service, date, business) => {
-        const totalSlots = (endTime - startTime) * 4;
-    
-        for (let i = 0; i < totalSlots; i++) {
-            const time = (startTime + i * 0.25).toFixed(2);
-            const slotId = `${time}-${employee}`;
-            const slotElement = document.getElementById(slotId);
-    
-            if (slotElement) {
-                slotElement.classList.add(`booked-${employee}`);
+    const colorTimeSlots = (bookingDetails) => {
+        const totalSlots = (bookingDetails.endTime - bookingDetails.startTime) * 4;
 
-                if (business == true) {
+        for (let i = 0; i < totalSlots; i++) {
+            const time = (bookingDetails.startTime + i * 0.25).toFixed(2);
+            const slotId = `${time}-${bookingDetails.employee}`;
+            const slotElement = document.getElementById(slotId);
+
+            if (slotElement) {
+                slotElement.classList.add(`booked-${bookingDetails.employee}`);
+
+                if (bookingDetails.business === true) {
                     slotElement.classList.add('business_booked');
-                } 
-    
-                const bookingDetails = {
-                    date, email, number, employee, price, service, note,
-                    time: `${formatTime(startTime)} - ${formatTime(endTime)}`,
-                    customer: `${firstName} ${lastName}`
-                };
-    
+                }
+
                 slotElement.onclick = () => handleSlotClick(bookingDetails);
-    
+
                 if (i === 0) {
-                    // Display different preview based on selected item (previewItem)
                     let bookingInfo = '';
                     if (previewItem === 'Name') {
-                        bookingInfo = `${firstName} ${lastName}`;
+                        bookingInfo = `${bookingDetails.firstName} ${bookingDetails.lastName}`;
                     } else if (previewItem === 'Email') {
-                        bookingInfo = email;
+                        bookingInfo = bookingDetails.email;
                     } else if (previewItem === 'Phone Number') {
-                        bookingInfo = number;
+                        bookingInfo = bookingDetails.phoneNumber;
                     } else if (previewItem === 'Service') {
-                        bookingInfo = service;
+                        bookingInfo = bookingDetails.service;
                     } else if (previewItem === 'Price') {
-                        bookingInfo = price;
+                        bookingInfo = bookingDetails.price;
                     } else if (previewItem === 'Time') {
-                        bookingInfo = `${formatTime(startTime)} - ${formatTime(endTime)}`;
+                        bookingInfo = `${formatTime(bookingDetails.startTime)} - ${formatTime(bookingDetails.endTime)}`;
                     }
-    
-                    // If there's a note, append the note indicator
-                    if (note !== '') {
+
+                    if (bookingDetails.appointmentNote !== '') {
                         bookingInfo += `<span class='note_indicator'></span>`;
                     }
-    
+
                     slotElement.innerHTML = bookingInfo;
-    
-                    // Add a tooltip with the booking details
-                    slotElement.setAttribute('title', `Booking: ${firstName} ${lastName}`);
+                    slotElement.setAttribute('title', `Booking: ${bookingDetails.firstName} ${bookingDetails.lastName}`);
                 }
-    
-                if (totalSlots === 1) {
-                    continue;
-                } else if (totalSlots === 2) {
+
+                if (totalSlots === 1) continue;
+                else if (totalSlots === 2) {
                     slotElement.classList.add(i === 0 ? 'booked_top' : 'booked_bottom');
                 } else if (totalSlots === 3) {
-                    if (i === 0) {
-                        slotElement.classList.add('booked_top');
-                    } else if (i === totalSlots - 1) {
-                        slotElement.classList.add('booked_bottom');
-                    } else {
-                        slotElement.classList.add('booked_middle');
-                    }
+                    if (i === 0) slotElement.classList.add('booked_top');
+                    else if (i === totalSlots - 1) slotElement.classList.add('booked_bottom');
+                    else slotElement.classList.add('booked_middle');
                 } else if (totalSlots >= 4) {
-                    if (i === 0) {
-                        slotElement.classList.add('booked_top');
-                    } else if (i === totalSlots - 1) {
-                        slotElement.classList.add('booked_bottom');
-                    } else {
-                        slotElement.classList.add('booked_middle');
-                    }
+                    if (i === 0) slotElement.classList.add('booked_top');
+                    else if (i === totalSlots - 1) slotElement.classList.add('booked_bottom');
+                    else slotElement.classList.add('booked_middle');
                 }
             }
         }
     };
-    
 
     const handleSlotClick = (bookingDetails) => {
-        setBooking(bookingDetails);
-    };
+        const startTime = bookingDetails.startTime;
+        const endTime = bookingDetails.endTime;
 
+        const bookingSlots = document.querySelectorAll(`.booked-${bookingDetails.employee}`);
+        const slotElements = Array.from(bookingSlots).filter(slot => {
+            const timeSlot = parseFloat(slot.id.split('-')[0]);
+            return timeSlot >= startTime && timeSlot < endTime;
+        });
+    
+        const firstSlot = slotElements[0];
+        const firstSlotRect = firstSlot.getBoundingClientRect();
+        const calendarContainer = document.querySelector('.calendar');
+        const calendarRect = calendarContainer.getBoundingClientRect();
+        const calendarTimes = document.querySelector('.calendar_times');
+        const calendarTimesWidth = calendarTimes ? calendarTimes.offsetWidth : 0;
+    
+        const position = {
+            top: firstSlotRect.top - calendarRect.top - 10, 
+            left: firstSlotRect.left - calendarRect.left - calendarTimesWidth - 0.5, 
+        };
+    
+        const slotWidth = firstSlot.offsetWidth;
+        setBooking({ ...bookingDetails, position, width: slotWidth });
+    };
+    
+    
     useEffect(() => {
         const fetchBookingsForSelectedDate = async () => {
             const selectedDateString = getFormattedDateString(currentDate);
-
             const currentQueryId = ++queryIdRef.current;
             clearTimeSlots();
-
+    
             for (let employee of employees) {
                 try {
                     const q = query(collection(db, 'bookings'), where('date', '==', selectedDateString), where('employee', '==', employee));
                     const querySnapshot = await getDocs(q);
-
+    
                     if (queryIdRef.current !== currentQueryId) {
                         return;
                     }
-
+    
                     if (!querySnapshot.empty) {
                         querySnapshot.forEach((doc) => {
-                            const booking = doc.data();
-                            const email = booking.email;
-                            const number = booking.phoneNumber;
-                            const startTime = booking.startTime;
-                            const endTime = booking.endTime;
-                            const firstName = booking.firstName;
-                            const lastName = booking.lastName;
-                            const note = booking.appointmentNote;
-                            const date = booking.date;
-                            const price = booking.price;
-                            const service = booking.service;
-                            const business = booking.business;
-                            colorTimeSlots(startTime, endTime, employee, firstName, lastName, email, number, note, price, service, date, business);
+                            const bookingDetails = { firestoreId: doc.id, ...doc.data() };
+    
+                            colorTimeSlots(bookingDetails);
                         });
                     }
                 } catch (error) {
@@ -165,12 +158,15 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
                 }
             }
         };
-
+    
         fetchBookingsForSelectedDate();
-    }, [currentDate, previewItem]);
+    }, [currentDate, previewItem, calendarUpdateTrigger]);
+    
+    
+    
 
     const generateTimeSlotId = (slotIndex, employee) => {
-        const baseTime = 9; // Starting at 9 AM
+        const baseTime = 9; 
         const time = baseTime + (slotIndex * 0.25);
         return `${time.toFixed(2)}-${employee}`;
     };
@@ -186,8 +182,7 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
     );
 
     return (
-        <div className="calendar">
-
+        <div className="calendar" style={{ position: 'relative' }}>
             <div className="calendar_times">
                 {['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'].map((time) => (
                     <p className="calendar_time_text" key={time}>{time}</p>
@@ -195,7 +190,7 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
             </div>
 
             <div className='calendar_main'>
-
+                {booking && <Booking setBooking={setBooking} booking={booking} handleCalendarUpdate={handleCalendarUpdate}/>}
                 <span className='hour_span' style={{ top: '99.5px' }}></span>
                 <span className='hour_span' style={{ top: '199.5px' }}></span>
                 <span className='hour_span' style={{ top: '299.5px' }}></span>

@@ -14,6 +14,12 @@
     font-size: 13px;
 }   
 
+.nav_left_text {
+    color: var(--blue);
+    font-size: 14px;
+    font-weight: 600;
+}
+
 .nav_icon {
     font-size: 18px;
     cursor: pointer;

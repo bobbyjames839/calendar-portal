@@ -31,7 +31,7 @@
     width: 20px;
     padding: 5px;
     border-radius: 10px;
-    background-color: var(--blue);
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
     color: var(--lightest);
     cursor: pointer;
 }
@@ -104,9 +104,29 @@
     cursor: pointer;
     background-color: transparent;
     transition: .3s;
-    margin-right: 10px;
+    margin-right: 5px;
 }
 
 .pb_action_button:hover {
     box-shadow: 0 0 10px var(--dark);
+}
+
+.loading_spinner_pb {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin: 30px;
+}
+
+.pb_remove_confirmation, .pb_email_confirmation {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.pb_remove_buttons {
+    display: flex;
+    margin-top: 20px;
+    align-items: center;
 }

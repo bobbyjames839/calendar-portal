@@ -89,7 +89,7 @@
 }
 
 .aas_one_button_selected {
-    background-color: var(--blue);
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
     color: var(--lightest);
 }
 

@@ -16,7 +16,7 @@
 }
 
 .manage_home_icon {
-    background-color: var(--blue);
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
     border-radius: 5px;
     cursor: pointer;
     height: 15px;
@@ -89,7 +89,7 @@
     height: 30px;
     width: 30px;
     padding: 10px;
-    background-color: var(--blue);
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
     color: var(--lightest);
 }
 
@@ -148,7 +148,7 @@
     height: 18px;
     padding: 5px;
     border-radius: 5px;
-    background-color: var(--blue);
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
     color: var(--lightest);
     cursor: pointer;
 }
@@ -219,7 +219,7 @@
 }
 
 .mbs_remove {
-    background-color: var(--blue);
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
     color: white;
     cursor: pointer;
     border-top-right-radius: 3px;

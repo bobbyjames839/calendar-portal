@@ -4,9 +4,9 @@ import { CalendarNav } from '../sections/CalendarNav';
 import { Nav } from '../sections/Nav';
 import { Profiles } from '../sections/Profiles';
 import '../styles/Home.css';
-import { Booking } from '../sections/Booking';
 import { CalendarDropdown } from '../sections/CalendarDropdown';
 import { PendingBookings } from '../sections/PendingBookings';
+import { Notif } from '../sections/Notif';
 
 const getInitialDate = () => {
     let initialDate = new Date();
@@ -22,11 +22,17 @@ const getInitialDate = () => {
 };
 
 export const Home = () => {
-    const [previewItem, setPreviewItem] = useState('Name'); // Track preview item
+    const [previewItem, setPreviewItem] = useState('Name');
     const [currentDate, setCurrentDate] = useState(getInitialDate);
-    const [booking, setBooking] = useState(null); 
     const [calendarDropdown, setCalendarDropdown] = useState(false);
-    const [pendingBookings, setPendingBookings] = useState(true);
+    const [pendingBookings, setPendingBookings] = useState(false);
+    const [notif, setNotif] = useState(false);
+    const [notifText, setNotifText] = useState('');
+    const [calendarUpdateTrigger, setCalendarUpdateTrigger] = useState(false); 
+
+    const handleCalendarUpdate = () => {
+        setCalendarUpdateTrigger(prev => !prev); // Toggle the trigger state
+    };
 
     return (
         <div className='home'>
@@ -41,20 +47,33 @@ export const Home = () => {
                 setPendingBookings={setPendingBookings}
             />
 
-            {pendingBookings && <PendingBookings setPendingBookings={setPendingBookings}/>}
+            {pendingBookings && (
+                <PendingBookings 
+                    setPendingBookings={setPendingBookings} 
+                    setNotif={setNotif} 
+                    setNotifText={setNotifText} 
+                    handleCalendarUpdate={handleCalendarUpdate} 
+                />
+            )}
+
+            {notif && <Notif notifText={notifText}/>}
 
             <Profiles />
 
             <Calendar 
                 currentDate={currentDate} 
-                setBooking={setBooking}
                 previewItem={previewItem}
+                calendarUpdateTrigger={calendarUpdateTrigger} 
+                handleCalendarUpdate={handleCalendarUpdate}
             />
 
-            {booking && <Booking setBooking={setBooking} bookingDetails={booking}/>}
-
-            {calendarDropdown && <CalendarDropdown currentDate={currentDate} setCurrentDate={setCurrentDate} setCalendarDropdown={setCalendarDropdown} />}
-
+            {calendarDropdown && (
+                <CalendarDropdown 
+                    currentDate={currentDate} 
+                    setCurrentDate={setCurrentDate} 
+                    setCalendarDropdown={setCalendarDropdown} 
+                />
+            )}
         </div>
     );
 };

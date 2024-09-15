@@ -53,9 +53,8 @@ export const AddAvailability = ({ employee, setAdding, refreshBookings }) => {
     const defaultDate = getNextWeekday(new Date());
     const [selectedDate, setSelectedDate] = useState(defaultDate);
 
-    // Helper function to generate a random 8-digit ID
-    const generateRandomId = () => {
-        return Math.floor(10000000 + Math.random() * 90000000).toString(); // Generates an 8-digit number
+    const generateBookingId = () => {
+        return Math.floor(1000000000000000 + Math.random() * 9000000000000000);
     };
 
     const handleMakeBooking = async () => {
@@ -111,7 +110,7 @@ export const AddAvailability = ({ employee, setAdding, refreshBookings }) => {
 
             const createBooking = async (staffMember) => {
                 const bookingData = {
-                    id: generateRandomId(), // Generate a random 8-digit ID
+                    id: generateBookingId(), // Generate a random 8-digit ID
                     price: 'Scheduled time off',
                     service: 'Scheduled time off',
                     employee: staffMember,

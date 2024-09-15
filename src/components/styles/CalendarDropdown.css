@@ -37,7 +37,7 @@
 
 .calendar_dropdown_top {
     display: flex;
-    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
     align-items: center;
     justify-content: space-between;
     padding: 10px 20px;

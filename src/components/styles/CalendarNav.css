@@ -20,7 +20,7 @@
     margin: 0 15px;
     box-sizing: border-box;
     color: var(--lightest);
-    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
 }
 
 .select_day_button {
@@ -60,7 +60,7 @@
     border: 1px solid var(--light);
     cursor: pointer;
     color: var(--lightest);
-    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
 }
 
 .select_preview {
@@ -76,7 +76,7 @@
     overflow: hidden;
     transition: .3s ease-in-out;
     color: var(--lightest);
-    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
 }
 
 .select_preview_top {
@@ -136,5 +136,5 @@
     font-weight: 500;
     cursor: pointer;
     color: var(--lightest);
-    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
+    background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
 }

@@ -1,17 +1,59 @@
-import { useState } from 'react';
-import '../styles/Booking.css';
+import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { doc, deleteDoc, addDoc, collection } from 'firebase/firestore';
+import { db } from '../config/Firebase.js'; 
+import '../styles/Booking.css';
 
-export const Booking = ({ setBooking, bookingDetails }) => {
+export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
     const [isClosing, setIsClosing] = useState(false);
 
-    const handleCloseSidebar = () => {
+    const formatTime = (time) => {
+        const hours = Math.floor(time);
+        const minutesDecimal = time % 1;
+
+        let minutes;
+        if (minutesDecimal === 0.25) {
+            minutes = '15';
+        } else if (minutesDecimal === 0.5) {
+            minutes = '30';
+        } else if (minutesDecimal === 0.75) {
+            minutes = '45';
+        } else {
+            minutes = '00';
+        }
+
+        return `${hours}:${minutes}`;
+    };
+
+    const closeBooking = () => {
+        console.log(booking)
         setIsClosing(true);
         setTimeout(() => {
             setBooking(null);
-        }, 500); 
+            setIsClosing(false);
+        }, 500);
+    }
+
+    const removeBooking = async () => {
+        try {
+            const { firestoreId, position, width, ...bookingData } = booking; 
+    
+            const bookingRef = doc(db, 'bookings', firestoreId);
+            const pendingBookingsRef = collection(db, 'pendingBookings');
+    
+            await addDoc(pendingBookingsRef, bookingData);
+            await deleteDoc(bookingRef);
+
+            handleCalendarUpdate(); 
+            setBooking(null);
+    
+            console.log('Booking moved to pendingBookings and removed from bookings');
+        } catch (error) {
+            console.error('Error removing booking:', error);
+        }
     };
+    
 
     const getEmployeeClass = (employee) => {
         switch (employee) {
@@ -31,31 +73,51 @@ export const Booking = ({ setBooking, bookingDetails }) => {
         return `${day}/${month}/${year}`;
     };
 
+    if (!booking) return null;
+
+    const { position, width } = booking; 
+
     return (
-        <div className={`booking ${isClosing ? 'booking_closing' : ''}`}>
-            {bookingDetails && (
+        <div
+            className={`booking ${isClosing ? 'booking_closing' : ''}`}
+            style={{
+                position: 'absolute',
+                top: `${position.top}px`,
+                left: `${position.left}px`,
+                width: `${width}px`, 
+                zIndex: 1000,
+            }}
+        >
+            <div className={`booking_top ${getEmployeeClass(booking.employee)}`}>
+                <p className='booking_time'>
+                    <span className='booking_time_inner'>{formatTime(booking.startTime)} - {formatTime(booking.endTime)}</span>
+                    {formatDate(booking.date)}
+                </p>
+                <FontAwesomeIcon icon={faTimes} className="close_booking" onClick={closeBooking} />
+            </div>
+
+            <div className="booking_middle">
+                <p className='client_info'>Client Information</p>
+                <p className='client_info_item'>{booking.firstName} {booking.lastName}</p>
+                <p className='client_info_item'>{booking.email}</p>
+                <p className='client_info_item'>{booking.phoneNumber}</p>
+                <p className='client_info'>Booking Information</p>
+                <p className='client_info_item'>{booking.service}</p>
+                <p className='client_info_item'>{booking.price}</p>
+                {booking.appointmentNote !== '' && 
                 <>
-                <div className={`booking_top ${getEmployeeClass(bookingDetails.employee)}`}>
-                    <FontAwesomeIcon icon={faTimes} className="close_booking" onClick={handleCloseSidebar} />
-                    <p className='booking_time'><span className='booking_time_inner'>{bookingDetails.time}</span>{formatDate(bookingDetails.date)}</p> 
-                </div>
-                <div className="booking_middle">
-                    <p className='client_info'>Client Information</p>
-                    <p className='client_info_item'>{bookingDetails.customer}</p>
-                    <p className='client_info_item'>{bookingDetails.email}</p>
-                    <p className='client_info_item'>{bookingDetails.number}</p>
-                    {bookingDetails.note !== '' && 
-                    <>
-                        <p className='client_info'>Appointment Note</p>
-                        <p className='client_info_item client_info_item_note'>{bookingDetails.note}</p>
-                    </>}
-                </div>
-                <div className={`booking_bottom ${getEmployeeClass(bookingDetails.employee)}`}>
-                    <p className='booking_type'>{bookingDetails.service}</p>
-                    <p className='booking_price'>{bookingDetails.price}</p>
-                </div>
-                </>
-            )}
+                    <p className='client_info'>Appointment Note</p>
+                    <p className='client_info_item client_info_item_note'>{booking.appointmentNote}</p>
+                </>}
+            </div>
+
+            {/* Remove button triggers the removeBooking function */}
+            <button 
+                className={`remove_booking ${getEmployeeClass(booking.employee)}`} 
+                onClick={removeBooking}
+            >
+                Remove
+            </button>
         </div>
     );
 };
