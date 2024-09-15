@@ -18,6 +18,7 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
                 slot.classList.remove(`booked-${employee}`);
                 slot.classList.remove('booked_top');
                 slot.classList.remove('booked_middle');
+                slot.classList.remove('business_booked');
                 slot.classList.remove('booked_bottom');
                 slot.innerText = '';
                 slot.removeAttribute('title');
@@ -45,7 +46,7 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
         return `${hours}:${minutes}`;
     };
 
-    const colorTimeSlots = (startTime, endTime, employee, firstName, lastName, email, number, note, price, service, date) => {
+    const colorTimeSlots = (startTime, endTime, employee, firstName, lastName, email, number, note, price, service, date, business) => {
         const totalSlots = (endTime - startTime) * 4;
     
         for (let i = 0; i < totalSlots; i++) {
@@ -55,6 +56,10 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
     
             if (slotElement) {
                 slotElement.classList.add(`booked-${employee}`);
+
+                if (business == true) {
+                    slotElement.classList.add('business_booked');
+                } 
     
                 const bookingDetails = {
                     date, email, number, employee, price, service, note,
@@ -151,7 +156,8 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
                             const date = booking.date;
                             const price = booking.price;
                             const service = booking.service;
-                            colorTimeSlots(startTime, endTime, employee, firstName, lastName, email, number, note, price, service, date);
+                            const business = booking.business;
+                            colorTimeSlots(startTime, endTime, employee, firstName, lastName, email, number, note, price, service, date, business);
                         });
                     }
                 } catch (error) {
@@ -181,6 +187,7 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
 
     return (
         <div className="calendar">
+
             <div className="calendar_times">
                 {['9:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'].map((time) => (
                     <p className="calendar_time_text" key={time}>{time}</p>
@@ -188,6 +195,15 @@ export const Calendar = ({ currentDate, setBooking, previewItem }) => {
             </div>
 
             <div className='calendar_main'>
+
+                <span className='hour_span' style={{ top: '99.5px' }}></span>
+                <span className='hour_span' style={{ top: '199.5px' }}></span>
+                <span className='hour_span' style={{ top: '299.5px' }}></span>
+                <span className='hour_span' style={{ top: '399.5px' }}></span>
+                <span className='hour_span' style={{ top: '499.5px' }}></span>
+                <span className='hour_span' style={{ top: '599.5px' }}></span>
+                <span className='hour_span' style={{ top: '699.5px' }}></span>
+
                 {employees.map(employee => (
                     <div className='calendar_section' key={employee}>
                         {renderCalendarSection(employee)}

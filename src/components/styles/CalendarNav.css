@@ -16,9 +16,11 @@
     background-color: var(--lightest);
     font-size: 13px;
     border-radius: 5px;
-    border: 1px solid var(--light);
+    border: 1px solid var(--lightest);
     margin: 0 15px;
     box-sizing: border-box;
+    color: var(--lightest);
+    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
 }
 
 .select_day_button {
@@ -31,17 +33,16 @@
 }
 
 .select_day_button_right {
-    border-left: 1px solid var(--light);
+    border-left: 1px solid var(--lightest);
 }
 
 .select_day_button_left {
-    border-right: 1px solid var(--light);
+    border-right: 1px solid var(--lightest);
 }   
 
 .selected_day {
     font-weight: 500;
     width: 180px;
-    background-color: var(--lightest);
     height: 100%;
     display: flex;
     align-items: center;
@@ -55,17 +56,17 @@
     justify-content: center;
     height: 30px;
     width: 30px;
-    background-color: var(--lightest);
     border-radius: 5px;
     border: 1px solid var(--light);
     cursor: pointer;
+    color: var(--lightest);
+    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
 }
 
 .select_preview {
     display: flex;
     flex-direction: column;
-    width: 250px;
-    background-color: var(--lightest);
+    width: 220px;
     padding: 0 10px;
     box-sizing: border-box;
     border-radius: 5px;
@@ -74,6 +75,8 @@
     z-index: 5;
     overflow: hidden;
     transition: .3s ease-in-out;
+    color: var(--lightest);
+    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
 }
 
 .select_preview_top {
@@ -87,6 +90,8 @@
 
 .select_preview_expanded {
     height: 170px;
+    background: var(--lightest);
+    color: var(--darkest);
 }
 
 .select_preview_text {
@@ -115,4 +120,21 @@
 
 .disabled_chevron_left {
     color: var(--light);
+}
+
+.calendar_nav_button {
+    height: 30px;
+    padding: 0 15px;
+    border: 1px solid var(--lightest);
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    margin-right: 15px;
+    background-color: var(--lightest);
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--lightest);
+    background: linear-gradient(to right, var(--blue) 50%, var(--darkblue));
 }

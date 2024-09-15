@@ -2,11 +2,13 @@ import '../styles/CalendarNav.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faChevronDown, faChevronLeft, faChevronRight, faChevronUp } from '@fortawesome/free-solid-svg-icons';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-export const CalendarNav = ({ currentDate, setCurrentDate, setCalendarDropdown, previewItem, setPreviewItem }) => {
+export const CalendarNav = ({ currentDate, setCurrentDate, setCalendarDropdown, previewItem, setPreviewItem, setPendingBookings }) => {
     const [bookingPreview, setBookingPreview] = useState(false);
+    const navigate = useNavigate();
 
-    // Check if currentDate is today
+
     const isToday = () => {
         const today = new Date();
         today.setHours(0, 0, 0, 0); // Set the time to midnight to ensure date-only comparison
@@ -86,6 +88,11 @@ export const CalendarNav = ({ currentDate, setCurrentDate, setCalendarDropdown, 
 
     return (
         <div className='calendar_nav'>
+
+            <span className='calendar_nav_button' onClick={() => (setPendingBookings(true))}>Pending Bookings</span>
+
+            <span onClick={() => (navigate('/manage'))} className='calendar_nav_button'>Manage Availability</span>
+
             <div className={`select_preview ${bookingPreview && 'select_preview_expanded'}`}>
                 <div className='select_preview_top'>
                     <p className='select_preview_text'>Select Booking Preview</p>
@@ -112,9 +119,11 @@ export const CalendarNav = ({ currentDate, setCurrentDate, setCalendarDropdown, 
                     <FontAwesomeIcon icon={faChevronRight} />
                 </span>
             </div>
+
             <span onClick={() => setCalendarDropdown(true)} className='view_calendar'>
                 <FontAwesomeIcon icon={faCalendar}/>
             </span>
+
         </div>
     );
 };

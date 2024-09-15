@@ -6,6 +6,7 @@ import { Profiles } from '../sections/Profiles';
 import '../styles/Home.css';
 import { Booking } from '../sections/Booking';
 import { CalendarDropdown } from '../sections/CalendarDropdown';
+import { PendingBookings } from '../sections/PendingBookings';
 
 const getInitialDate = () => {
     let initialDate = new Date();
@@ -25,6 +26,7 @@ export const Home = () => {
     const [currentDate, setCurrentDate] = useState(getInitialDate);
     const [booking, setBooking] = useState(null); 
     const [calendarDropdown, setCalendarDropdown] = useState(false);
+    const [pendingBookings, setPendingBookings] = useState(true);
 
     return (
         <div className='home'>
@@ -36,7 +38,10 @@ export const Home = () => {
                 setCalendarDropdown={setCalendarDropdown}
                 setPreviewItem={setPreviewItem}
                 previewItem={previewItem}
+                setPendingBookings={setPendingBookings}
             />
+
+            {pendingBookings && <PendingBookings setPendingBookings={setPendingBookings}/>}
 
             <Profiles />
 

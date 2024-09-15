@@ -1,0 +1,112 @@
+.pending_bookings {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 100%;
+    height: 100vh;
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.pending_bookings_inner {
+    position: relative;
+    width: 80%;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--lightest);
+    border-radius: 10px;
+    box-shadow: 0 0 10px var(--dark);
+}
+
+.pending_bookings_close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    height: 20px;
+    width: 20px;
+    padding: 5px;
+    border-radius: 10px;
+    background-color: var(--blue);
+    color: var(--lightest);
+    cursor: pointer;
+}
+
+.pending_bookings_title {
+    width: 100%;
+    font-weight: 500;
+}
+
+.pending_bookings_subtitle {
+    width: 100%;
+    font-size: 15px;
+}
+
+.pending_bookings_list {
+    padding: 5px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    width: 100%;
+    margin-top: 20px;
+    max-height: 50vh;
+    overflow: auto;
+    row-gap: 30px;
+}
+
+.pending_booking_item {
+    font-size: 14px;
+    width: 30%;
+    margin: 0 1.66%;
+    display: flex;
+    flex-direction: column;
+    padding: 10px 15px;
+    box-sizing: border-box;
+    border-radius: 10px;
+    background-color: var(--lighter);
+    box-shadow: 0 0 5px var(--dark);
+}
+
+.pb_timing {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;;
+}
+
+.pb_div {
+    display: flex;
+    flex-direction: column;
+    margin-top: 15px;
+}
+
+.pb_item_header {
+    font-weight: 600;
+    border-bottom: 1px solid var(--dark);
+    width: 100%;
+    margin-bottom: 8px;
+}
+
+.pb_item_buttons {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.pb_action_button {
+    padding: 3px 5px;
+    border: 1px solid var(--dark);
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: transparent;
+    transition: .3s;
+    margin-right: 10px;
+}
+
+.pb_action_button:hover {
+    box-shadow: 0 0 10px var(--dark);
+}
