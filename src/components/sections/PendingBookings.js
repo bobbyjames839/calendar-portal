@@ -5,6 +5,35 @@ import { useEffect, useState } from 'react';
 import { db } from '../config/Firebase.js'; 
 import { collection, getDocs, deleteDoc, doc, addDoc } from 'firebase/firestore';
 
+const sendBookingEmail = async (bookingData) => {
+    console.log(bookingData.email);
+    const sendSmtpEmail = {
+        to: [{ email: bookingData.email }],
+        templateId: 2,  
+    };
+
+    try {
+        const response = await fetch('https://api.sendinblue.com/v3/smtp/email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'api-key': process.env.REACT_APP_BREVO_API_KEY, 
+            },
+            body: JSON.stringify(sendSmtpEmail),
+        });
+
+        if (response.ok) {
+            const data = await response.json();
+            console.log('Email sent successfully:', data);
+        } else {
+            const errorData = await response.json();
+            console.error('Error sending email:', errorData);
+        }
+    } catch (error) {
+        console.error('Error sending email:', error);
+    }
+};
+
 export const PendingBookings = ({ setPendingBookings, setNotif, setNotifText, handleCalendarUpdate }) => {
     const [pendingBookings, setPendingBookingsState] = useState([]);
     const [allBookings, setAllBookings] = useState([]);
@@ -76,6 +105,7 @@ export const PendingBookings = ({ setPendingBookings, setNotif, setNotifText, ha
             setTimeout(() => setNotif(false), 3000);
 
             if (sendEmail) {
+                sendBookingEmail(booking);
                 console.log('Sending cancellation confirmation email...');
             }
 
