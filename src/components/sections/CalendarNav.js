@@ -60,9 +60,12 @@ export const CalendarNav = ({ currentDate, setCurrentDate, setCalendarDropdown, 
         return newDate; 
     };
 
-    const formatDate = (date) => { 
-        const options = { weekday: 'long', month: 'short', day: 'numeric' }; 
-        return date.toLocaleDateString(undefined, options); 
+    // Modify formatDate to change based on screen width
+    const formatDate = (date) => {
+        const options = isNarrowView 
+            ? { weekday: 'short', month: 'short', day: 'numeric' }  // For narrow view, use short weekday
+            : { weekday: 'long', month: 'short', day: 'numeric' };  // Default format for larger screens
+        return date.toLocaleDateString(undefined, options);
     };
 
     const handlePreviousDay = () => { 

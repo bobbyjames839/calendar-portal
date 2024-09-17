@@ -95,7 +95,7 @@
 }
 
 .select_preview_expanded {
-    height: 170px;
+    height: 190px;
     background: var(--lightest);
     color: var(--darkest);
 }
@@ -147,7 +147,7 @@
 
 @media (max-width: 800px) {
     .selected_day {
-        width: 135px;
+        width: 95px;
     }
 
     .select_day {
@@ -164,10 +164,19 @@
         width: 30px;
     }
     .select_preview {
-        width: 120px;
+        width: 115px;
+        padding: 0 5px;
     }
 
     .select_preview_text {
         font-size: 12px;
+    }
+
+    .select_preview_text_bottom {
+        font-size: 11px;
+    }
+
+    .select_preview_expanded {
+        height: 180px;
     }
 }
