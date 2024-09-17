@@ -164,7 +164,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
         };
 
         fetchBookingsForSelectedDate();
-    }, [currentDate, calendarUpdateTrigger]);
+    }, [currentDate, calendarUpdateTrigger, employees]);
 
     // Clear and color time slots when bookings or viewState changes
     useEffect(() => {
@@ -177,7 +177,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 });
             }
         });
-    }, [bookings, viewState]);
+    }, [bookings, viewState, clearTimeSlots]);
 
     const generateTimeSlotId = (slotIndex, employee) => {
         const baseTime = 9; 

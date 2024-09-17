@@ -45,7 +45,8 @@ export const Manage = () => {
     useEffect(() => {
         const unsubscribe = fetchBookings();
         return () => unsubscribe(); 
-    }, [employee]);
+    }, [employee, fetchBookings]); 
+    
 
 
     const removeBooking = async () => {
@@ -84,7 +85,7 @@ export const Manage = () => {
             {isFontAwesomeIcon ? (
                 <FontAwesomeIcon icon={faUsers} className='meps_icon meps_image' />
             ) : (
-                <img src={image} className='meps_image' />
+                <img src={image} alt='Profile' className='meps_image' />
             )}
             <span className='meps_span'></span>
             <span className='meps_span_2'></span>

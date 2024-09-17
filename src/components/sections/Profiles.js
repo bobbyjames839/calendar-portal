@@ -5,7 +5,6 @@ import image3 from '../images/image3.jpeg';
 import image4 from '../images/image4.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
-import { useEffect } from 'react';
 
 export const Profiles = ({ viewState, shiftLeft, shiftRight }) => {
 
