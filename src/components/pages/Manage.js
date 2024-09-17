@@ -1,6 +1,6 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faHome, faPlus, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, onSnapshot, doc, deleteDoc, getDocs } from 'firebase/firestore'; 
 import { db } from '../config/Firebase.js';
 import '../styles/Manage.css';
@@ -19,8 +19,8 @@ export const Manage = () => {
     const [removingId, setRemovingId] = useState(null);
     const navigate = useNavigate();
 
-
-    const fetchBookings = () => {
+    // Wrap fetchBookings in useCallback
+    const fetchBookings = useCallback(() => {
         const bookingsRef = collection(db, 'bookings');
         let bookingsQuery;
 
@@ -39,32 +39,27 @@ export const Manage = () => {
         });
 
         return unsubscribe; 
-    };
+    }, [employee]); // Add employee as a dependency
 
-
+    // useEffect that depends on fetchBookings
     useEffect(() => {
         const unsubscribe = fetchBookings();
         return () => unsubscribe(); 
-    }, [employee, fetchBookings]); 
-    
-
+    }, [fetchBookings]);
 
     const removeBooking = async () => {
-
         try {
-
             const q = query(collection(db, 'bookings'), where('id', '==', removingId));
             const querySnapshot = await getDocs(q);
-            console.log(removingId)
+            console.log(removingId);
 
             if (!querySnapshot.empty) {
                 querySnapshot.forEach(async (docSnapshot) => {
-
                     const bookingRef = doc(db, 'bookings', docSnapshot.id);
                     await deleteDoc(bookingRef);
                     console.log(`Booking with ID ${removingId} has been removed.`);
                 });
-                setAddingBack(false)
+                setAddingBack(false);
             } else {
                 console.error("No booking found with the provided ID.");
             }
@@ -72,7 +67,6 @@ export const Manage = () => {
             console.error("Error removing booking: ", error);
         }
     };
-    
     
     const formatTime = (decimalTime) => {
         const hours = Math.floor(decimalTime);
@@ -96,7 +90,6 @@ export const Manage = () => {
 
     return (
         <>
-
         {addingBack && <div className='add_availability_back'>
             <div className='aab_inner'>
                 <p className='aab_text'>Are you sure you want to remove your time, customers will be able to book this time again.</p>

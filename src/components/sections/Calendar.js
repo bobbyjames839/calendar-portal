@@ -1,20 +1,23 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, useCallback, useMemo } from 'react';
 import '../styles/Calendar.css';
 import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/Firebase.js';
 import { Booking } from './Booking.js';
 
-export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, handleCalendarUpdate, viewState,  }) => {
-    const employees = ['Bobby', 'Tommy', 'Jasmine', 'Harry'];
+export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, handleCalendarUpdate, viewState }) => {
+    
+    // Memoize employees array to avoid re-creation on every render
+    const employees = useMemo(() => ['Bobby', 'Tommy', 'Jasmine', 'Harry'], []);
+    
     const queryIdRef = useRef(0);
     const [bookings, setBookings] = useState({});
-    const [booking, setBooking] = useState(null) // Store bookings by employee and date
+    const [booking, setBooking] = useState(null);
 
     const getFormattedDateString = (date) => {
         return date.toDateString();
     };
 
-    const clearTimeSlots = () => {
+    const clearTimeSlots = useCallback(() => {
         employees.forEach(employee => {
             const bookedSlots = document.querySelectorAll(`.booked-${employee}, .booked_top, .booked_middle, .booked_bottom`);
             bookedSlots.forEach(slot => {
@@ -28,7 +31,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 slot.onclick = null;
             });
         });
-    };
+    }, [employees]); // Add employees as dependency
 
     const formatTime = (time) => {
         const hours = Math.floor(time);
@@ -48,7 +51,8 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
         return `${hours}:${minutes}`;
     };
 
-    const colorTimeSlots = (bookingDetails) => {
+    // Memoize colorTimeSlots function to avoid re-creation
+    const colorTimeSlots = useCallback((bookingDetails) => {
         const totalSlots = (bookingDetails.endTime - bookingDetails.startTime) * 4;
 
         for (let i = 0; i < totalSlots; i++) {
@@ -103,7 +107,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 }
             }
         }
-    };
+    }, [previewItem]); // Add previewItem as dependency
 
     const handleSlotClick = (bookingDetails) => {
         const startTime = bookingDetails.startTime;
@@ -177,7 +181,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 });
             }
         });
-    }, [bookings, viewState, clearTimeSlots]);
+    }, [bookings, viewState, clearTimeSlots, colorTimeSlots, employees]);
 
     const generateTimeSlotId = (slotIndex, employee) => {
         const baseTime = 9; 
