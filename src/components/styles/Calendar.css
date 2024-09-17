@@ -25,6 +25,7 @@
     height: 800px;
     position: relative;
     border: .5px solid var(--lighter);
+    overflow: auto;
 }
 
 .calendar_section {
@@ -114,6 +115,25 @@
     border-top: 20px solid var(--blue);
     border-top-right-radius: 10px;
 }
+
+@media (max-width: 1100px) {
+    .calendar_section {
+        width: 33.3%;
+    }
+}
+
+@media (max-width: 850px) {
+    .calendar_section {
+        width: 50%;
+    }
+}
+
+@media (max-width: 550px) {
+    .calendar_section {
+        width: 100%;
+    }
+}
+
 
 
 

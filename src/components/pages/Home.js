@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Calendar } from '../sections/Calendar';
 import { CalendarNav } from '../sections/CalendarNav';
 import { Nav } from '../sections/Nav';
@@ -28,10 +28,44 @@ export const Home = () => {
     const [pendingBookings, setPendingBookings] = useState(false);
     const [notif, setNotif] = useState(false);
     const [notifText, setNotifText] = useState('');
-    const [calendarUpdateTrigger, setCalendarUpdateTrigger] = useState(false); 
+    const [calendarUpdateTrigger, setCalendarUpdateTrigger] = useState(false);
+
+    const [viewState, setViewState] = useState([true, true, true, true]);
 
     const handleCalendarUpdate = () => {
-        setCalendarUpdateTrigger(prev => !prev); // Toggle the trigger state
+        setCalendarUpdateTrigger(prev => !prev); 
+    };
+
+    const handleResize = () => {
+        const width = window.innerWidth;
+        if (width < 550) {
+            setViewState([true, false, false, false]);  
+        } else if (width < 850) {
+            setViewState([true, true, false, false]);  
+        } else if (width < 1100) {
+            setViewState([true, true, true, false]); 
+        } else {
+            setViewState([true, true, true, true]); 
+        }
+    };
+
+    useEffect(() => {
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const shiftRight = () => {
+        setViewState(prevState => {
+            return [prevState[prevState.length - 1], ...prevState.slice(0, prevState.length - 1)];
+        });
+    };
+
+    const shiftLeft = () => {
+        setViewState(prevState => {
+            return [...prevState.slice(1), prevState[0]];
+        });
     };
 
     return (
@@ -58,13 +92,18 @@ export const Home = () => {
 
             {notif && <Notif notifText={notifText}/>}
 
-            <Profiles />
+            <Profiles 
+                shiftLeft={shiftLeft}
+                shiftRight={shiftRight}
+                viewState={viewState} 
+            />
 
             <Calendar 
                 currentDate={currentDate} 
                 previewItem={previewItem}
                 calendarUpdateTrigger={calendarUpdateTrigger} 
                 handleCalendarUpdate={handleCalendarUpdate}
+                viewState={viewState} 
             />
 
             {calendarDropdown && (

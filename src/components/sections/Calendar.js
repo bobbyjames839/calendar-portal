@@ -4,10 +4,11 @@ import { collection, query, where, getDocs } from 'firebase/firestore';
 import { db } from '../config/Firebase.js';
 import { Booking } from './Booking.js';
 
-export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, handleCalendarUpdate }) => {
+export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, handleCalendarUpdate, viewState,  }) => {
     const employees = ['Bobby', 'Tommy', 'Jasmine', 'Harry'];
     const queryIdRef = useRef(0);
-    const [booking, setBooking] = useState(null);
+    const [bookings, setBookings] = useState({});
+    const [booking, setBooking] = useState(null) // Store bookings by employee and date
 
     const getFormattedDateString = (date) => {
         return date.toDateString();
@@ -129,14 +130,14 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
         const slotWidth = firstSlot.offsetWidth;
         setBooking({ ...bookingDetails, position, width: slotWidth });
     };
-    
-    
+
+    // Only fetch bookings when date or calendarUpdateTrigger changes
     useEffect(() => {
         const fetchBookingsForSelectedDate = async () => {
             const selectedDateString = getFormattedDateString(currentDate);
             const currentQueryId = ++queryIdRef.current;
-            clearTimeSlots();
-    
+
+            const newBookings = {};
             for (let employee of employees) {
                 try {
                     const q = query(collection(db, 'bookings'), where('date', '==', selectedDateString), where('employee', '==', employee));
@@ -145,25 +146,38 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                     if (queryIdRef.current !== currentQueryId) {
                         return;
                     }
-    
+
+                    const employeeBookings = [];
                     if (!querySnapshot.empty) {
                         querySnapshot.forEach((doc) => {
-                            const bookingDetails = { firestoreId: doc.id, ...doc.data() };
-    
-                            colorTimeSlots(bookingDetails);
+                            employeeBookings.push({ firestoreId: doc.id, ...doc.data() });
                         });
                     }
+
+                    newBookings[employee] = employeeBookings;
                 } catch (error) {
                     console.error(`Error fetching bookings for ${employee}: `, error);
                 }
             }
+
+            setBookings(newBookings);
         };
-    
+
         fetchBookingsForSelectedDate();
-    }, [currentDate, previewItem, calendarUpdateTrigger]);
-    
-    
-    
+    }, [currentDate, calendarUpdateTrigger]);
+
+    // Clear and color time slots when bookings or viewState changes
+    useEffect(() => {
+        clearTimeSlots();
+
+        employees.forEach((employee, index) => {
+            if (viewState[index] && bookings[employee]) {
+                bookings[employee].forEach((bookingDetails) => {
+                    colorTimeSlots(bookingDetails);
+                });
+            }
+        });
+    }, [bookings, viewState]);
 
     const generateTimeSlotId = (slotIndex, employee) => {
         const baseTime = 9; 
@@ -188,9 +202,9 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                     <p className="calendar_time_text" key={time}>{time}</p>
                 ))}
             </div>
-
+    
             <div className='calendar_main'>
-                {booking && <Booking setBooking={setBooking} booking={booking} handleCalendarUpdate={handleCalendarUpdate}/>}
+                <Booking booking={booking} setBooking={setBooking} handleCalendarUpdate={handleCalendarUpdate} />
                 <span className='hour_span' style={{ top: '99.5px' }}></span>
                 <span className='hour_span' style={{ top: '199.5px' }}></span>
                 <span className='hour_span' style={{ top: '299.5px' }}></span>
@@ -198,12 +212,22 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 <span className='hour_span' style={{ top: '499.5px' }}></span>
                 <span className='hour_span' style={{ top: '599.5px' }}></span>
                 <span className='hour_span' style={{ top: '699.5px' }}></span>
+    
+                {viewState[0] && <div className={`calendar_section calendar_section_${employees[0].toLowerCase()}`} key={employees[0]}>
+                    {renderCalendarSection(employees[0])}
+                </div>}
 
-                {employees.map(employee => (
-                    <div className='calendar_section' key={employee}>
-                        {renderCalendarSection(employee)}
-                    </div>
-                ))}
+                {viewState[1] && <div className={`calendar_section calendar_section_${employees[1].toLowerCase()}`} key={employees[1]}>
+                    {renderCalendarSection(employees[1])}
+                </div>}
+
+                {viewState[2] && <div className={`calendar_section calendar_section_${employees[2].toLowerCase()}`} key={employees[2]}>
+                    {renderCalendarSection(employees[2])}
+                </div>}
+
+                {viewState[3] && <div className={`calendar_section calendar_section_${employees[3].toLowerCase()}`} key={employees[3]}>
+                    {renderCalendarSection(employees[3])}
+                </div>}
             </div>
         </div>
     );

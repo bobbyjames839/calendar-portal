@@ -246,7 +246,7 @@ export const PendingBookings = ({ setPendingBookings, setNotif, setNotifText, ha
                                 </div>
                             ))
                         ) : (
-                            <p>No pending bookings available.</p>
+                            <p className='no_pending'>No pending bookings available.</p>
                         )
                     )}
                 </div>

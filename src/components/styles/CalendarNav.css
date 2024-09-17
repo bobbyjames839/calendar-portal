@@ -1,12 +1,18 @@
+
 .calendar_nav {
     display: flex;
-    padding-top: 15px;
     box-sizing: border-box;
     width: 100%;
     justify-content: center;
     height: 60px;
     background-color: var(--lighter);
     margin-bottom: 15px;
+    padding: 15px 15px 0 15px;
+    box-sizing: border-box;
+}
+
+.calendar_nav_button, .select_day, .select_preview, .view_calendar {
+    flex-shrink: 0; 
 }
 
 .select_day {
@@ -137,4 +143,31 @@
     cursor: pointer;
     color: var(--lightest);
     background: linear-gradient(to right, var(--blue) 50%, var(--lighterblue));
+}
+
+@media (max-width: 800px) {
+    .selected_day {
+        width: 135px;
+    }
+
+    .select_day {
+        margin: 0 5px;
+        font-size: 12px;
+    }
+
+    .calendar_nav_button {
+        margin-right: 5px;
+        padding: 0 10px;
+    }
+
+    .select_day_button {
+        width: 30px;
+    }
+    .select_preview {
+        width: 120px;
+    }
+
+    .select_preview_text {
+        font-size: 12px;
+    }
 }

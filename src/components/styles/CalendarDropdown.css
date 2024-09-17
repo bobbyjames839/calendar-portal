@@ -126,3 +126,15 @@
 .current_dropdown_day {
     background-color: var(--lightblue);
 }
+
+@media (max-width: 650px) {
+    .calendar_dropdown {
+        width: 300px;
+    }
+
+    .calendar_dropdown_day {
+        height: 30px;
+        width: 30px;
+        margin: 3px 0;
+    }
+}

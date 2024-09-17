@@ -39,11 +39,12 @@
 .pending_bookings_title {
     width: 100%;
     font-weight: 500;
+    font-size: 21px;
 }
 
 .pending_bookings_subtitle {
     width: 100%;
-    font-size: 15px;
+    font-size: 14px;
 }
 
 .pending_bookings_list {
@@ -56,6 +57,7 @@
     max-height: 50vh;
     overflow: auto;
     row-gap: 30px;
+    justify-content: center;
 }
 
 .pending_booking_item {
@@ -69,6 +71,7 @@
     border-radius: 10px;
     background-color: var(--lighter);
     box-shadow: 0 0 5px var(--dark);
+    min-width: 250px;
 }
 
 .pb_timing {
@@ -129,4 +132,9 @@
     display: flex;
     margin-top: 20px;
     align-items: center;
+}
+
+.no_pending {
+    font-size: 12px;
+    color: var(--light);
 }
