@@ -159,3 +159,9 @@
         opacity: 1; 
     }
 }
+
+.business_booking {
+    pointer-events: none;
+    cursor: default;
+    background-color: var(--lighter);
+}

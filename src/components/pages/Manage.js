@@ -1,7 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck, faPlus, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect, useCallback } from 'react';
-import { collection, query, where, onSnapshot, doc, deleteDoc, getDocs } from 'firebase/firestore'; 
+import { collection, query, where, onSnapshot, doc, deleteDoc } from 'firebase/firestore'; 
 import { db } from '../config/Firebase.js';
 import '../styles/manage/Manage.css';
 import img1 from '../images/image1.jpg';
@@ -94,7 +94,7 @@ export const Manage = ({ notif, setNotif, setNotifText, notifText }) => {
                 <span className='meps_span'></span>
                 <span className='meps_span_2'></span>
                 <p className='meps_text'>{name}</p>
-                {name == employee && <span className="extra_span_meps"></span>}
+                {name === employee && <span className="extra_span_meps"></span>}
             </div>
         );
     };

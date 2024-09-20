@@ -52,6 +52,9 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
             bookingSpan = document.createElement('span');
             bookingSpan.id = `booking-${bookingDetails.firestoreId}`;
             bookingSpan.classList.add('calendar_booking', bookingClass, `booked-${bookingDetails.employee}`);
+            if (bookingDetails.business == true) {
+                bookingSpan.classList.add('business_booking');
+            }
             bookingSpan.style.top = `${top}px`;  
 
             const calendarSection = document.querySelector(`.calendar_section_${bookingDetails.employee.toLowerCase()}`);
@@ -104,7 +107,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
         } else {
             bookingSpan.classList.remove('expanded_booking');  // Remove expanded class if not selected
         }
-    }, [previewItem, selectedBooking]);
+    }, [previewItem, selectedBooking, handleBookingClick, handleCalendarUpdate]);
 
     
 
@@ -153,7 +156,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 });
             }
         });
-    }, [bookings, viewState, renderBookings, employees]);
+    }, [bookings, viewState, renderBookings, employees, clearCalendarSections]);
 
     return (
         <div className="calendar" style={{ position: 'relative' }}>

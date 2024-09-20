@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { doc, deleteDoc, addDoc, collection } from 'firebase/firestore';
@@ -64,8 +63,6 @@ export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
     };
 
     if (!booking) return null;
-
-    const { position, width } = booking; 
 
     return (
         <>
