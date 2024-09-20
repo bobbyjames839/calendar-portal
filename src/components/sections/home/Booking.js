@@ -2,11 +2,10 @@ import React, { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { doc, deleteDoc, addDoc, collection } from 'firebase/firestore';
-import { db } from '../config/Firebase.js'; 
-import '../styles/Booking.css';
+import { db } from '../../config/Firebase.js'; 
+import '../../styles/home/Booking.css';
 
 export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
-    const [isClosing, setIsClosing] = useState(false);
 
     const formatTime = (time) => {
         const hours = Math.floor(time);
@@ -25,15 +24,6 @@ export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
 
         return `${hours}:${minutes}`;
     };
-
-    const closeBooking = () => {
-        console.log(booking)
-        setIsClosing(true);
-        setTimeout(() => {
-            setBooking(null);
-            setIsClosing(false);
-        }, 500);
-    }
 
     const removeBooking = async () => {
         try {
@@ -78,22 +68,13 @@ export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
     const { position, width } = booking; 
 
     return (
-        <div
-            className={`booking ${isClosing ? 'booking_closing' : ''}`}
-            style={{
-                position: 'absolute',
-                top: `${position.top}px`,
-                left: `${position.left}px`,
-                width: `${width}px`, 
-                zIndex: 1000,
-            }}
-        >
+        <>
             <div className={`booking_top ${getEmployeeClass(booking.employee)}`}>
                 <p className='booking_time'>
                     <span className='booking_time_inner'>{formatTime(booking.startTime)} - {formatTime(booking.endTime)}</span>
                     {formatDate(booking.date)}
                 </p>
-                <FontAwesomeIcon icon={faTimes} className="close_booking" onClick={closeBooking} />
+                <FontAwesomeIcon icon={faTimes} className="close_booking" onClick={() => setBooking(false)} />
             </div>
 
             <div className="booking_middle">
@@ -111,13 +92,12 @@ export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
                 </>}
             </div>
 
-            {/* Remove button triggers the removeBooking function */}
             <button 
                 className={`remove_booking ${getEmployeeClass(booking.employee)}`} 
                 onClick={removeBooking}
             >
                 Remove
             </button>
-        </div>
+        </>
     );
 };

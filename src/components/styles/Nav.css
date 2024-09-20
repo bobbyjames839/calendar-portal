@@ -1,11 +1,13 @@
 .nav {
     display: flex;
     align-items: center;
+    position: relative;
     width: 100%;
     justify-content: space-between;
     box-sizing: border-box;
     padding: 0 10px;
-    height: 40px;
+    height: 60px;
+    background-color: var(--lightest);
 }
 
 .nav_right, .nav_left {
@@ -14,18 +16,118 @@
     font-size: 13px;
 }   
 
-.nav_left_text {
-    color: var(--blue);
-    font-size: 14px;
-    font-weight: 600;
-}
-
 .nav_icon {
-    font-size: 18px;
+    font-size: 20px;
     cursor: pointer;
-    transition: .3s;
+    margin-right: 12px;
 }
 
-.nav_icon:hover {
+.nav_link {
+    margin: 0 5px;
+    color: var(--darkest);
+    text-decoration: none;
+    font-weight: 500;
+    cursor: pointer;
+    padding: 4px 10px;
+    border-radius: 10px;
+}
+
+.active_nav {
+    background-color: var(--lightblue);
+}
+
+.nav_logo {
+    position: absolute;
+    font-size: 15px;
+    font-weight: 500;
+    display: none;
+    top: 50%;
+    right: 50%;
+    transform: translate(50%, -50%);
+}
+
+.show_nav_dropdown {
+    display: none;
+    cursor: pointer;
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    transform: translateY(-50%);
+}
+
+.nav_dropdown {
+    position: fixed;
+    z-index: 1000;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    width: 100%;
+    background-color: var(--lightest);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    animation: scrollInNav .5s ease-in-out;
+}
+
+@keyframes scrollInNav {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
+    }
+}
+
+
+
+.nav_dropdown_close {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.nav_dropdown_icon {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.nav_dropdown_title {
+    margin: 40px 0 30px 0;
     color: var(--blue);
 }
+
+.nav_dropdown_link {
+    padding: 25px 0;
+    font-size: 14px;
+    font-weight: 500;
+    width: 90%;
+    text-align: center;
+    transition: .3s;
+    cursor: pointer;
+}
+
+.nav_dropdown_link:hover {
+    box-shadow: 0 0 5px var(--light);
+}
+
+.ndl_middle {
+    border-top: 1px solid var(--dark);
+    border-bottom: 1px solid var(--dark);
+}
+
+
+@media (max-width: 600px ) {
+    .nav_right, .nav_left {
+        display: none;
+    }
+
+    .nav_logo, .show_nav_dropdown {
+        display: flex;
+    }
+}
+

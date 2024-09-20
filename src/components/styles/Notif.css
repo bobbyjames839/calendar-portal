@@ -10,12 +10,14 @@
     border-bottom-right-radius: 10px;
     text-align: center;
     display: flex;
+    align-items: center;
+    justify-content: center;
     animation: notifSlide 0.5s ease-in-out;
     background-color: var(--blue);
     color: var(--lightest);
     font-weight: 500;
-    align-items: center;
     min-width: 250px;
+    font-size: 14px;
 }
 
 @keyframes notifSlide {

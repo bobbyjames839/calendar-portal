@@ -1,0 +1,161 @@
+.calendar {
+    display: flex;
+    width: 90%;
+    margin-bottom: 100px;
+    align-items: center;
+    height: 920px;
+}
+
+.calendar_times {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    justify-content: space-between;
+    width: 40px;
+    padding-right: 10px;
+    box-sizing: border-box;
+    height: 898px;
+    font-size: 12px;
+}
+
+.calendar_main {
+    display: flex;
+    width: calc(100% - 40px);
+    height: 880px;
+    position: relative;
+    border: .5px solid var(--lighter);
+    overflow: auto;
+}
+
+.calendar_section {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 25%;
+    box-sizing: border-box;
+    border: .5px solid var(--lighter);
+    position: relative;
+}
+
+.calendar_booking {
+    position: absolute;
+    left: 50%;  
+    transform: translateX(-50%); 
+    border-radius: 5px;
+    box-sizing: border-box;
+    cursor: pointer;
+    transition: .3s;
+    width: 95%;
+    border: 1px solid var(--light);
+}
+
+
+.calendar_booking:hover {
+    box-shadow: 0 0 5px var(--light);
+}
+
+.booking_small_size {
+    height: 20px; 
+}
+
+.booking_medium_size {
+    height: 47.5px; 
+}
+
+.booking_large_size {
+    height: 75px; 
+}
+
+.booked-Bobby {background: var(--lilac-blue);}
+.booked-Tommy {background-color: var(--lilac-green);}
+.booked-Jasmine {background-color: var(--lilac-yellow);}
+.booked-Harry {background-color: var(--lilac-pink);}
+
+.booking_info {
+    font-size: 13px;
+    font-weight: 500;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    padding-left: 5px;
+}
+
+.hour_span {
+    position: absolute;
+    height: 1px;
+    width: 100%;
+    background-color: var(--lighter);
+}
+
+.note_indicator {
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 0;
+    height: 0;
+    border-left: 18px solid transparent;
+    border-top: 18px solid var(--blue);
+    border-top-right-radius: 5px;
+}
+
+.calendar_loading {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 100%;
+    z-index: 20;
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+}
+
+.loading_calendar_span {
+    height: 70px;
+    margin-top: 50px;
+    width: 70px; 
+    border: 8px solid var(--lighter); 
+    border-top: 8px solid var(--blue);
+    border-radius: 50%;
+    animation: spin 1s linear infinite; 
+  }
+  
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 1100px) {
+    .calendar_section {
+        width: 33.3%;
+    }
+}
+
+@media (max-width: 850px) {
+    .calendar_section {
+        width: 50%;
+    }
+}
+
+@media (max-width: 550px) {
+    .calendar_section {
+        width: 100%;
+    }
+}
+
+.expanded_booking {
+    height: auto;
+    z-index: 2;
+    background-color: var(--lightest);
+    border-radius: 10px;
+    animation: fadeIn .5s linear;
+}
+
+@keyframes fadeIn {
+    0% { 
+        opacity: 0; 
+    }
+    100% { 
+        opacity: 1; 
+    }
+}

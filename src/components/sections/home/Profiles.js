@@ -1,8 +1,8 @@
-import '../styles/Profiles.css';    
-import image1 from '../images/image1.jpg';
-import image2 from '../images/image2.jpg';
-import image3 from '../images/image3.jpeg';
-import image4 from '../images/image4.jpeg';
+import '../../styles/home/Profiles.css';    
+import image1 from '../../images/image1.jpg';
+import image2 from '../../images/image2.jpg';
+import image3 from '../../images/image3.jpeg';
+import image4 from '../../images/image4.jpeg';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faChevronLeft, faChevronRight } from '@fortawesome/free-solid-svg-icons';
 
@@ -10,8 +10,8 @@ export const Profiles = ({ viewState, shiftLeft, shiftRight }) => {
 
     return (
         <div className='profiles'>
-            <FontAwesomeIcon icon={faChevronLeft} className='profile_left' onClick={shiftLeft}/>
-            <FontAwesomeIcon icon={faChevronRight} className='profile_right' onClick={shiftRight}/>
+            <span className='profile_left' onClick={shiftLeft}><FontAwesomeIcon icon={faChevronLeft}/></span>
+            <span className='profile_right' onClick={shiftRight}><FontAwesomeIcon icon={faChevronRight}/></span>
             
             {viewState[0] && <div className='profile_div'>
                 <img src={image1} alt='Profile 1' className='profile_pic'/>

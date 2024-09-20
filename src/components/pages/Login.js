@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import '../styles/Login.css';
+import '../styles/login/Login.css';
 import { useNavigate } from 'react-router-dom';
 
 export const Login = () => {
@@ -37,7 +37,7 @@ export const Login = () => {
                 <button className='submit_login' onClick={handleLogin}>Submit</button>
                 {error && <p className='error_message_login'>{error}</p>} 
             </div>
-            <p className='logo'>BT Bookings</p>
+            <p className='logo'>B&T Bookings</p>
         </div>
     );
 };

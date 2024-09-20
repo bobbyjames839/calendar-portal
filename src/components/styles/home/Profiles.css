@@ -20,7 +20,8 @@
     width: 50px;
     object-fit: cover;
     border-radius: 100px;
-    border: 1px solid var(--light);
+    box-shadow: 0 0 5px var(--blue);
+    transition: .3s;
 }
 
 .profile_tag {
@@ -28,18 +29,35 @@
     font-weight: 500;
 }
 
+.profile_pic:hover .profile_tag {
+    display: hidden;
+}
+
+.profile_pic:hover {
+    transform: translateY(15px) scale(1.4);
+}
+
+
 .profile_right, .profile_left {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 25px;
-    background: linear-gradient(to bottom right, var(--lightblue) 30%, var(--lighterblue));
-    padding: 10px;
     border-radius: 10px;
     right: 0;
     cursor: pointer;
     transition: .3s;
+    box-shadow: 0 0 5px var(--light);
     display: none;
+    height: 40px;
+    width: 30px;
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile_right:hover, .profile_left:hover {
+    box-shadow: 0 0 10px var(--dark);
 }
 
 .profile_left {

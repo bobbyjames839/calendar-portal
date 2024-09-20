@@ -1,12 +1,10 @@
 import { useEffect, useState } from 'react';
-import { Calendar } from '../sections/Calendar';
-import { CalendarNav } from '../sections/CalendarNav';
+import { Calendar } from '../sections/home/Calendar';
+import { CalendarNav } from '../sections/home/CalendarNav';
+import { Profiles } from '../sections/home/Profiles';
+import '../styles/home/Home.css';
+import { CalendarDropdown } from '../sections/home/CalendarDropdown';
 import { Nav } from '../sections/Nav';
-import { Profiles } from '../sections/Profiles';
-import '../styles/Home.css';
-import { CalendarDropdown } from '../sections/CalendarDropdown';
-import { PendingBookings } from '../sections/PendingBookings';
-import { Notif } from '../sections/Notif';
 
 const getInitialDate = () => {
     let initialDate = new Date();
@@ -25,9 +23,6 @@ export const Home = () => {
     const [previewItem, setPreviewItem] = useState('Name');
     const [currentDate, setCurrentDate] = useState(getInitialDate);
     const [calendarDropdown, setCalendarDropdown] = useState(false);
-    const [pendingBookings, setPendingBookings] = useState(false);
-    const [notif, setNotif] = useState(false);
-    const [notifText, setNotifText] = useState('');
     const [calendarUpdateTrigger, setCalendarUpdateTrigger] = useState(false);
 
     const [viewState, setViewState] = useState([true, true, true, true]);
@@ -70,7 +65,8 @@ export const Home = () => {
 
     return (
         <div className='home'>
-            <Nav />
+
+            <Nav/>
 
             <CalendarNav 
                 currentDate={currentDate}
@@ -78,19 +74,7 @@ export const Home = () => {
                 setCalendarDropdown={setCalendarDropdown}
                 setPreviewItem={setPreviewItem}
                 previewItem={previewItem}
-                setPendingBookings={setPendingBookings}
             />
-
-            {pendingBookings && (
-                <PendingBookings 
-                    setPendingBookings={setPendingBookings} 
-                    setNotif={setNotif} 
-                    setNotifText={setNotifText} 
-                    handleCalendarUpdate={handleCalendarUpdate} 
-                />
-            )}
-
-            {notif && <Notif notifText={notifText}/>}
 
             <Profiles 
                 shiftLeft={shiftLeft}

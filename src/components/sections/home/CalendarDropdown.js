@@ -1,4 +1,4 @@
-import '../styles/CalendarDropdown.css';
+import '../../styles/home/CalendarDropdown.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faArrowRight, faArrowLeft, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect } from 'react';
