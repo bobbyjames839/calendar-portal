@@ -8,7 +8,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCalendar, faClock, faSliders, faUser } from '@fortawesome/free-solid-svg-icons'; 
 import { Filters } from '../sections/pending/Filters.js';
 
-export const Pending = ({notif, setNotif, setNotifText, notifText}) => {
+export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
     const [pendingBookings, setPendingBookings] = useState([]);
     const [allBookings, setAllBookings] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -16,7 +16,8 @@ export const Pending = ({notif, setNotif, setNotifText, notifText}) => {
     const [cancellingLoading, setCancellingLoading] = useState(false);
     const [filters, setFilters] = useState(false);
     const [customerInfo, setCustomerInfo] = useState(0);
-    const [sort, setSort] = useState(0); 
+    const [sort, setSort] = useState(0);
+    const [isRestoring, setIsRestoring] = useState(false); // Added to handle restore button spam
 
     useEffect(() => {
         const fetchPendingBookings = async () => {
@@ -66,18 +67,23 @@ export const Pending = ({notif, setNotif, setNotifText, notifText}) => {
         });
     };
 
+    // Restore a booking and prevent spam clicking
     const restoreBooking = async (booking) => {
+        if (isRestoring) return; // Prevent restore if it's already in progress
         try {
+            setIsRestoring(true); // Set restoring state to true
             setLoading(true);
-            const { firestoreId, ...bookingData } = booking;
 
+            const { firestoreId, ...bookingData } = booking;
             await addDoc(collection(db, 'bookings'), bookingData);
             await deleteDoc(doc(db, 'pendingBookings', firestoreId));
+
             setPendingBookings(prevBookings => prevBookings.filter(b => b.firestoreId !== firestoreId));
         } catch (error) {
             console.error('Error restoring booking:', error);
         } finally {
             setLoading(false);
+            setIsRestoring(false); // Reset restoring state
             setNotifText('Booking restored successfully.');
             setNotif(true);
             setTimeout(() => setNotif(false), 3000);
@@ -163,7 +169,7 @@ export const Pending = ({notif, setNotif, setNotifText, notifText}) => {
 
             <div className="pending_content">
                 <div className='pending_filter'>
-                    <div className='pending_filter_left' onClick={() => (setFilters(true))}>
+                    <div className='pending_filter_left' onClick={() => setFilters(true)}>
                         <FontAwesomeIcon icon={faSliders} className='pending_filter_icon'/>
                         <p className='pending_filter_text'>Filters</p>
                     </div>
@@ -229,20 +235,18 @@ export const Pending = ({notif, setNotif, setNotifText, notifText}) => {
                                             <button 
                                                 className='pending_booking_button pbb_restore'
                                                 onClick={() => restoreBooking(booking)}
+                                                disabled={isRestoring} // Disable button while restoring
                                             >
-                                                Restore
+                                                {isRestoring ? 'Restoring...' : 'Restore'}
                                             </button>
                                         )}
                                         <button 
                                             className='pending_booking_button pbb_cancel' 
-                                            onClick={() => {
-                                                setCancellingBooking(booking); 
-                                            }}
+                                            onClick={() => setCancellingBooking(booking)}
                                         >
                                             Cancel
                                         </button>
                                     </div>
-
                                 </div>
                             ))}
                         </div>

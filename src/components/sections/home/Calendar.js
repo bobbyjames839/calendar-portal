@@ -5,7 +5,6 @@ import { db } from '../../config/Firebase.js';
 import { Booking } from './Booking.js';
 import ReactDOM from 'react-dom';
 
-
 export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, handleCalendarUpdate, viewState }) => {
     const employees = useMemo(() => ['Bobby', 'Tommy', 'Jasmine', 'Harry'], []);
     const queryIdRef = useRef(0);
@@ -13,28 +12,20 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
     const [selectedBooking, setSelectedBooking] = useState(null);  
     const [loading, setLoading] = useState(false);
 
-    const clearCalendarSections = () => {
-        employees.forEach(employee => {
-            const section = document.querySelector(`.calendar_section_${employee.toLowerCase()}`);
-            if (section) {
-                section.innerHTML = '';
-            }
-        });
-    };
+    // Wrap handleBookingClick in useCallback to prevent it from changing on every render
+    const handleBookingClick = useCallback((bookingDetails) => {
+        if (selectedBooking && selectedBooking.firestoreId === bookingDetails.firestoreId) {
+            setSelectedBooking(null); // Deselect if clicked again
+        } else {
+            setSelectedBooking(bookingDetails); // Select booking
+        }
+    }, [selectedBooking]);
 
     const formatTime = (time) => {
         const hours = Math.floor(time);
         const minutesDecimal = time % 1;
         const minutes = minutesDecimal === 0.25 ? '15' : minutesDecimal === 0.5 ? '30' : minutesDecimal === 0.75 ? '45' : '00';
         return `${hours}:${minutes}`;
-    };
-
-    const handleBookingClick = (bookingDetails) => {
-        if (selectedBooking && selectedBooking.firestoreId === bookingDetails.firestoreId) {
-            setSelectedBooking(null); // Deselect if clicked again
-        } else {
-            setSelectedBooking(bookingDetails); // Select booking
-        }
     };
 
     const renderBookings = useCallback((bookingDetails) => {
@@ -52,7 +43,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
             bookingSpan = document.createElement('span');
             bookingSpan.id = `booking-${bookingDetails.firestoreId}`;
             bookingSpan.classList.add('calendar_booking', bookingClass, `booked-${bookingDetails.employee}`);
-            if (bookingDetails.business == true) {
+            if (bookingDetails.business === true) {
                 bookingSpan.classList.add('business_booking');
             }
             bookingSpan.style.top = `${top}px`;  
@@ -98,6 +89,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
             // Use React to render the Booking component directly inside the span
             ReactDOM.render(
                 <Booking 
+                    setLoading={setLoading}
                     booking={bookingDetails} 
                     setBooking={setSelectedBooking} 
                     handleCalendarUpdate={handleCalendarUpdate} 
@@ -107,9 +99,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
         } else {
             bookingSpan.classList.remove('expanded_booking');  // Remove expanded class if not selected
         }
-    }, [previewItem, selectedBooking, handleBookingClick, handleCalendarUpdate]);
-
-    
+    }, [previewItem, selectedBooking, handleCalendarUpdate]);
 
     useEffect(() => {
         const fetchBookingsForSelectedDate = async () => {
@@ -148,6 +138,15 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
     }, [currentDate, calendarUpdateTrigger, employees]);
 
     useEffect(() => {
+        const clearCalendarSections = () => {
+            employees.forEach(employee => {
+                const section = document.querySelector(`.calendar_section_${employee.toLowerCase()}`);
+                if (section) {
+                    section.innerHTML = '';
+                }
+            });
+        };
+
         clearCalendarSections(); 
         employees.forEach((employee, index) => {
             if (viewState[index] && bookings[employee]) {
@@ -156,7 +155,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 });
             }
         });
-    }, [bookings, viewState, renderBookings, employees, clearCalendarSections]);
+    }, [bookings, viewState, renderBookings, employees]);
 
     return (
         <div className="calendar" style={{ position: 'relative' }}>

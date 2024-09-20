@@ -4,7 +4,7 @@ import { doc, deleteDoc, addDoc, collection } from 'firebase/firestore';
 import { db } from '../../config/Firebase.js'; 
 import '../../styles/home/Booking.css';
 
-export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
+export const Booking = ({ setBooking, booking, handleCalendarUpdate, setLoading }) => {
 
     const formatTime = (time) => {
         const hours = Math.floor(time);
@@ -26,6 +26,7 @@ export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
 
     const removeBooking = async () => {
         try {
+            setLoading(true);
             const { firestoreId, position, width, ...bookingData } = booking; 
     
             const bookingRef = doc(db, 'bookings', firestoreId);
@@ -36,6 +37,7 @@ export const Booking = ({ setBooking, booking, handleCalendarUpdate }) => {
 
             handleCalendarUpdate(); 
             setBooking(null);
+            setLoading(false);
     
             console.log('Booking moved to pendingBookings and removed from bookings');
         } catch (error) {
