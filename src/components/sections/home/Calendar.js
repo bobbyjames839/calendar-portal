@@ -99,7 +99,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
         } else {
             bookingSpan.classList.remove('expanded_booking');  // Remove expanded class if not selected
         }
-    }, [previewItem, selectedBooking, handleCalendarUpdate]);
+    }, [previewItem, selectedBooking, handleCalendarUpdate, handleBookingClick]);
 
     useEffect(() => {
         const fetchBookingsForSelectedDate = async () => {
