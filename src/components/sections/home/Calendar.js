@@ -12,12 +12,11 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
     const [selectedBooking, setSelectedBooking] = useState(null);  
     const [loading, setLoading] = useState(false);
 
-    // Wrap handleBookingClick in useCallback to prevent it from changing on every render
     const handleBookingClick = useCallback((bookingDetails) => {
         if (selectedBooking && selectedBooking.firestoreId === bookingDetails.firestoreId) {
-            setSelectedBooking(null); // Deselect if clicked again
+            setSelectedBooking(null);
         } else {
-            setSelectedBooking(bookingDetails); // Select booking
+            setSelectedBooking(bookingDetails); 
         }
     }, [selectedBooking]);
 
@@ -51,13 +50,11 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
             const calendarSection = document.querySelector(`.calendar_section_${bookingDetails.employee.toLowerCase()}`);
             calendarSection.appendChild(bookingSpan);
 
-            // Add click event to toggle expanded height
             bookingSpan.addEventListener('click', () => handleBookingClick(bookingDetails));
         }
 
-        bookingSpan.innerHTML = '';  // Clear the content of the span initially
+        bookingSpan.innerHTML = '';  
 
-        // Render preview content if booking is not selected (collapsed)
         if (!selectedBooking || selectedBooking.firestoreId !== bookingDetails.firestoreId) {
             let bookingInfo = '';
             if (previewItem === 'Name') {
@@ -82,11 +79,8 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
             bookingSpan.setAttribute('title', `Booking: ${bookingDetails.firstName} ${bookingDetails.lastName}`);
         }
 
-        // When booking is selected, render the Booking component inside the booking span
         if (selectedBooking && selectedBooking.firestoreId === bookingDetails.firestoreId) {
-            bookingSpan.classList.add('expanded_booking');  // Add class to expand height
-
-            // Use React to render the Booking component directly inside the span
+            bookingSpan.classList.add('expanded_booking');
             ReactDOM.render(
                 <Booking 
                     setLoading={setLoading}
@@ -97,7 +91,7 @@ export const Calendar = ({ currentDate, previewItem, calendarUpdateTrigger, hand
                 bookingSpan
             );
         } else {
-            bookingSpan.classList.remove('expanded_booking');  // Remove expanded class if not selected
+            bookingSpan.classList.remove('expanded_booking');  
         }
     }, [previewItem, selectedBooking, handleCalendarUpdate, handleBookingClick]);
 

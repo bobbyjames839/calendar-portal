@@ -1,5 +1,5 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck, faPlus, faTimes, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faPlus, faTimes, faTrash, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { useState, useEffect, useCallback } from 'react';
 import { collection, query, where, onSnapshot, doc, deleteDoc } from 'firebase/firestore'; 
 import { db } from '../config/Firebase.js';
@@ -18,7 +18,23 @@ export const Manage = ({ notif, setNotif, setNotifText, notifText }) => {
     const [bookings, setBookings] = useState([]); 
     const [addingBack, setAddingBack] = useState(false);
     const [removingId, setRemovingId] = useState(null);
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(false);
+    const [windowWidth, setWindowWidth] = useState(window.innerWidth); 
+    const [isMobileView, setIsMobileView] = useState(false);
+
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsMobileView(window.innerWidth < 700);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     const fetchBookings = useCallback(() => {
         const bookingsRef = collection(db, 'bookings');
@@ -49,11 +65,17 @@ export const Manage = ({ notif, setNotif, setNotifText, notifText }) => {
     }, [employee]);
     
 
-    
     useEffect(() => {
         const unsubscribe = fetchBookings();
         return () => unsubscribe(); 
     }, [fetchBookings]);
+
+    // Track window resize
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
 
     const removeBooking = async () => {
         setLoading(true);
@@ -72,11 +94,31 @@ export const Manage = ({ notif, setNotif, setNotifText, notifText }) => {
         }
     };
     
-    
     const formatTime = (decimalTime) => {
         const hours = Math.floor(decimalTime);
         const minutes = Math.round((decimalTime - hours) * 60);
         return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    };
+
+    // Corrected formatDate function
+    const formatDate = (dateString) => {
+        if (windowWidth < 800) {
+            const date = new Date(dateString);
+            const day = date.toLocaleDateString('en-US', { weekday: 'short' });
+            const month = date.toLocaleDateString('en-US', { month: 'short' });
+            const dayOfMonth = date.getDate();
+
+            const getOrdinalSuffix = (n) => {
+                const s = ["th", "st", "nd", "rd"],
+                    v = n % 100;
+                return n + (s[(v - 20) % 10] || s[v] || s[0]);
+            };
+            const dayWithSuffix = getOrdinalSuffix(dayOfMonth);
+            return `${day} ${month} ${dayWithSuffix}`;
+        } else {
+            // Return the original date string for larger screens
+            return dateString;
+        }
     };
 
     const EmployeePicker = ({ name, image, setEmployee, isFontAwesomeIcon }) => {
@@ -137,25 +179,25 @@ export const Manage = ({ notif, setNotif, setNotifText, notifText }) => {
                 {adding && <AddAvailability setNotif={setNotif} setNotifText={setNotifText} employee={employee} setAdding={setAdding} refreshBookings={fetchBookings} />}
 
                 <div className='manage_main_header'>
-                    <span className='manage_main_header_span'>Employee</span>
-                    <span className='manage_main_header_span'>Date</span>
-                    <span className='manage_main_header_span'>All Day</span>
-                    <span className='manage_main_header_span'>Time</span>
-                    <span className='manage_main_header_span'>Action</span>
+                    <span className='manage_main_header_span mmhs1'>Employee</span>
+                    <span className='manage_main_header_span mmhs2'>Date</span>
+                    <span className='manage_main_header_span mmhs3'>All Day</span>
+                    <span className='manage_main_header_span mmhs4'>Time</span>
+                    <span className='manage_main_header_span mmhs5'>Action</span>
                 </div>
 
                 <div className='manage_main_bookings'>
                     {bookings.length > 0 ? (
                         bookings.map((booking) => (
                             <div key={booking.id} className='manage_booking_item'>
-                                <span className='manage_booking_span'>{booking.employee}</span>
-                                <span className='manage_booking_span'>{booking.date}</span>
-                                <span className='manage_booking_span'>
+                                <span className='manage_booking_span mbs1'>{booking.employee}</span>
+                                <span className='manage_booking_span mbs2'>{formatDate(booking.date)}</span>
+                                <span className='manage_booking_span mbs3'>
                                     {booking.startTime === 9 && booking.endTime === 17 ? <FontAwesomeIcon icon={faCheck} className='booking_tick_icon'/> : <FontAwesomeIcon icon={faTimes} className='booking_cross_icon'/>}
                                 </span>
-                                <span className='manage_booking_span'>{formatTime(booking.startTime)} - {formatTime(booking.endTime)}</span>
-                                <span className='manage_booking_span'>
-                                    <button onClick={() => {(setAddingBack(true)); setRemovingId(booking.id)}} className='mbs_remove'>Remove</button>
+                                <span className='manage_booking_span mbs4'>{formatTime(booking.startTime)} - {formatTime(booking.endTime)}</span>
+                                <span className='manage_booking_span mbs5'>
+                                    <button onClick={() => {(setAddingBack(true)); setRemovingId(booking.id)}} className='mbs_remove'>{isMobileView ? <FontAwesomeIcon icon={faTrash}/>: 'Remove'}</button>
                                 </span>
                             </div>
                         ))

@@ -5,7 +5,7 @@ import '../styles/pending/Pending.css';
 import { getDocs, collection, doc, deleteDoc, addDoc } from 'firebase/firestore'; 
 import { db } from '../config/Firebase.js'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faClock, faSliders, faUser } from '@fortawesome/free-solid-svg-icons'; 
+import { faCalendar, faCancel, faClipboard, faClock, faConciergeBell, faEllipsisH, faHashtag, faSliders, faTasks, faTrashRestore, faUser, faUserCircle } from '@fortawesome/free-solid-svg-icons'; 
 import { Filters } from '../sections/pending/Filters.js';
 
 export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
@@ -17,7 +17,23 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
     const [filters, setFilters] = useState(false);
     const [customerInfo, setCustomerInfo] = useState(0);
     const [sort, setSort] = useState(0);
-    const [isRestoring, setIsRestoring] = useState(false); // Added to handle restore button spam
+    const [isRestoring, setIsRestoring] = useState(false);
+    const [isNarrowView, setIsNarrowView] = useState(false);
+    const [isMobileView, setIsMobileView] = useState(false);
+
+    useEffect(() => {
+        const handleResize = () => {
+            setIsNarrowView(window.innerWidth < 1100);
+            setIsMobileView(window.innerWidth < 700);
+        };
+
+        window.addEventListener('resize', handleResize);
+        handleResize();
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+    }, []);
 
     useEffect(() => {
         const fetchPendingBookings = async () => {
@@ -48,7 +64,6 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
         fetchPendingBookings();
     }, []);
 
-    // Function to check if a pending booking overlaps with any existing bookings
     const isOverlapping = (pendingBooking) => {
         return allBookings.some(booking => {
             if (booking.employee === pendingBooking.employee && booking.date === pendingBooking.date) {
@@ -67,11 +82,10 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
         });
     };
 
-    // Restore a booking and prevent spam clicking
     const restoreBooking = async (booking) => {
-        if (isRestoring) return; // Prevent restore if it's already in progress
+        if (isRestoring) return;
         try {
-            setIsRestoring(true); // Set restoring state to true
+            setIsRestoring(true); 
             setLoading(true);
 
             const { firestoreId, ...bookingData } = booking;
@@ -83,7 +97,7 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
             console.error('Error restoring booking:', error);
         } finally {
             setLoading(false);
-            setIsRestoring(false); // Reset restoring state
+            setIsRestoring(false); 
             setNotifText('Booking restored successfully.');
             setNotif(true);
             setTimeout(() => setNotif(false), 3000);
@@ -182,11 +196,11 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
                 )}
 
                 {pendingBookings.length > 0 && <div className="pending_header">
-                    <span className="pending_header_span">Time</span>
-                    <span className="pending_header_span">Service</span>
-                    <span className="pending_header_span">Customer</span>
-                    <span className="pending_header_span">Reference No.</span>
-                    <span className="pending_header_span">Action</span>
+                    <span className={`pending_header_span phs1 ${sort == 0 && 'phs_sorted1'}`}>Time</span>
+                    <span className={`pending_header_span phs2 ${sort == 0 && 'phs_sorted2'}`}>Service</span>
+                    <span className="pending_header_span phs3">Customer</span>
+                    <span className="pending_header_span phs4">Ref.</span>
+                    <span className="pending_header_span phs5">Action</span>
                 </div>}
 
                 {Object.keys(groupedBookings).length > 0 ? (
@@ -196,64 +210,69 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
                                 <FontAwesomeIcon icon={sort === 0 ? faCalendar : faUser} className='pending_section_title_icon'/>
                                 <h3 className='pending_section_title'>{sort === 0 ? formatDate(groupKey) : groupKey}</h3>
                             </div>
+                            <div className='pending_section_inner'>
+                                {groupedBookings[groupKey].map((booking) => (
+                                    <div key={booking.bookingId} className="pending_booking">
+                                        <div className={`pending_booking_inner pbi1 ${sort == 0 && 'pbi_sorted1'}`}>
+                                            <FontAwesomeIcon icon={faClock} className='pending_booking_time_icon'/>
+                                            <p className='pending_booking_text'>
+                                                {sort === 1 && `${formatDate(booking.date)}, `}
+                                                {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
+                                            </p>
+                                        </div>
 
-                            {groupedBookings[groupKey].map((booking) => (
-                                <div key={booking.bookingId} className="pending_booking">
-                                    <div className='pending_booking_inner'>
-                                        <FontAwesomeIcon icon={faClock} className='pending_booking_time_icon'/>
-                                        <p className='pending_booking_text'>
-                                            {sort === 1 && `${formatDate(booking.date)}, `}
-                                            {formatTime(booking.startTime)} - {formatTime(booking.endTime)}
-                                        </p>
-                                    </div>
+                                        <div className={`pending_booking_inner pbi2 ${sort == 0 && 'pbi_sorted2'}`}>
+                                            {isMobileView && <FontAwesomeIcon icon={faClipboard} className='pending_booking_mobile_icon'/>}
+                                            {sort === 0 && (
+                                                <span className={`pending_booking_employee_initial ${booking.employee === 'Bobby' ? 'pbei_bobby' : ''} ${booking.employee === 'Tommy' ? 'pbei_tommy' : ''} ${booking.employee === 'Jasmine' ? 'pbei_jasmine' : ''} ${booking.employee === 'Harry' ? 'pbei_harry' : ''}`}>
+                                                    {booking.employee.charAt(0)} 
+                                                </span>
+                                            )}
+                                            <p className='pending_booking_text'>{booking.service}</p>
+                                        </div>
 
-                                    <div className='pending_booking_inner'>
-                                        {sort === 0 && (
-                                            <span className={`pending_booking_employee_initial ${booking.employee === 'Bobby' ? 'pbei_bobby' : ''} ${booking.employee === 'Tommy' ? 'pbei_tommy' : ''} ${booking.employee === 'Jasmine' ? 'pbei_jasmine' : ''} ${booking.employee === 'Harry' ? 'pbei_harry' : ''}`}>
-                                                {booking.employee.charAt(0)} 
-                                            </span>
-                                        )}
-                                        <p className='pending_booking_text'>{booking.service}</p>
-                                    </div>
+                                        <div className='pending_booking_inner pbi3'>
+                                            <p className='pending_booking_text'>
+                                                {isMobileView && <FontAwesomeIcon icon={faUser} className='pending_booking_mobile_icon'/>}
+                                                {customerInfo === 0 && `${booking.firstName} ${booking.lastName}`}
+                                                {customerInfo === 1 && booking.email}
+                                                {customerInfo === 2 && booking.phoneNumber}
+                                            </p>
+                                        </div>
 
-                                    <div className='pending_booking_inner'>
-                                        <p className='pending_booking_text'>
-                                            {customerInfo === 0 && `${booking.firstName} ${booking.lastName}`}
-                                            {customerInfo === 1 && booking.email}
-                                            {customerInfo === 2 && booking.phoneNumber}
-                                        </p>
-                                    </div>
+                                        <div className='pending_booking_inner pbi4'>
+                                            <p className='pending_booking_text'>
+                                                {isMobileView && <FontAwesomeIcon icon={faHashtag} className='pending_booking_mobile_icon'/>}
+                                                {booking.bookingId ? `${String(booking.bookingId).substring(0, 3)}...` : 'No ID'}
+                                            </p>
+                                        </div>
 
-                                    <div className='pending_booking_inner'>
-                                        <p className='pending_booking_text'>
-                                            {booking.bookingId ? `${String(booking.bookingId).substring(0, 3)}...` : 'No ID'}
-                                        </p>
-                                    </div>
-
-                                    <div className='pending_booking_inner'>
-                                        {!isOverlapping(booking) && (
+                                        <div className='pending_booking_inner pbi5'>
+                                            {isMobileView && <FontAwesomeIcon icon={faTasks} className='pending_booking_mobile_icon'/>}
+                                            {!isOverlapping(booking) && (
+                                                <button 
+                                                    className='pending_booking_button pbb_restore'
+                                                    onClick={() => restoreBooking(booking)}
+                                                    disabled={isRestoring} // Disable button while restoring
+                                                >
+                                                    {isNarrowView ? <FontAwesomeIcon icon={faTrashRestore}/> : 'Restore'}
+                                                </button>
+                                            )}
                                             <button 
-                                                className='pending_booking_button pbb_restore'
-                                                onClick={() => restoreBooking(booking)}
-                                                disabled={isRestoring} // Disable button while restoring
+                                                className='pending_booking_button pbb_cancel' 
+                                                onClick={() => setCancellingBooking(booking)}
                                             >
-                                                {isRestoring ? 'Restoring...' : 'Restore'}
+                                                {isNarrowView ? <FontAwesomeIcon icon={faCancel}/> : 'Cancel'}
                                             </button>
-                                        )}
-                                        <button 
-                                            className='pending_booking_button pbb_cancel' 
-                                            onClick={() => setCancellingBooking(booking)}
-                                        >
-                                            Cancel
-                                        </button>
+                                        </div>
                                     </div>
-                                </div>
-                            ))}
+                                ))}
+                            </div>
                         </div>
-                    ))
-                ) : (
-                    <div className="pending_no_bookings">This page displays a list of bookings that have been removed from your calendar. You currently have none.</div>
-                )}
+                        ))
+                    ) : (
+                        <div className="pending_no_bookings">This page displays a list of bookings that have been removed from your calendar. You currently have none.</div>
+                    )}
             </div> 
         </div>
     );

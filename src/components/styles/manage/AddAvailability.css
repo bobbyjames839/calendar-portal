@@ -203,3 +203,27 @@
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
 }
+
+@media (max-width: 600px) {
+    .add_availability_inner {
+        width: 350px;
+    }
+
+    .add_availability_timedate {
+        flex-direction: column;
+    }
+
+    .add_availability_time {
+        border-left: none;
+        border-top: 1px solid var(--light);
+        width: 100%;
+        padding-left: 0;
+    }
+}
+
+
+@media (max-width: 400px) {
+    .add_availability_inner {
+        width: 280px;
+    }
+}

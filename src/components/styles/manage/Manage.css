@@ -11,8 +11,10 @@
 .manage_employee_picker {
     display: flex;
     align-items: center;
-    width: 100%;
-    justify-content: space-evenly;
+    width: 90%;
+    padding: 0 20px;
+    box-sizing: border-box;
+    justify-content: space-between;
     margin: 20px 0 5px 0;
 }
 
@@ -278,11 +280,13 @@
 @media (max-width: 1000px) {
     .manage_employee_picker {
         overflow: auto;
+        width: 100%;
+        padding: 0 20px 0 10px;
     }
 
     .manage_employee_picker_section {
         min-width: 150px;
-        margin: 0 8px;
+        margin: 0 10px;
     }
 
     .meps_image {
@@ -300,7 +304,6 @@
         left: 15px;
         font-size: 14px;
     }
-
 }
 
 .manage_employee_picker::-webkit-scrollbar {
@@ -308,19 +311,8 @@
 }
 
 .manage_employee_picker::-webkit-scrollbar-thumb {
-    background-color: var(--blue); 
+    background-color: var(--light); 
     border-radius: 10px; 
-}
-
-.manage_employee_picker::-webkit-scrollbar-track {
-    background-color: var(--lightest); 
-    border-radius: 10px;
-}
-
-@media (max-width: 700px) {
-    .manage_main_header {
-        font-size: 12px;
-    }
 }
 
 .add_back_loading {
@@ -350,4 +342,18 @@
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 700px) {
+    .mbs2, .mmhs2, .mbs4, .mmhs4, .mmhs1, .mbs1 {
+        width: 29%;
+    }
+
+    .mbs5, .mmhs5 {
+        width: 13%;
+    }
+
+    .mbs3, .mmhs3 {
+        display: none;
+    }
 }
