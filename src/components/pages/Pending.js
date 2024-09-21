@@ -5,7 +5,7 @@ import '../styles/pending/Pending.css';
 import { getDocs, collection, doc, deleteDoc, addDoc } from 'firebase/firestore'; 
 import { db } from '../config/Firebase.js'; 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCalendar, faCancel, faClipboard, faClock, faConciergeBell, faEllipsisH, faHashtag, faSliders, faTasks, faTrashRestore, faUser, faUserCircle } from '@fortawesome/free-solid-svg-icons'; 
+import { faCalendar, faCancel, faClipboard, faClock, faHashtag, faSliders, faTasks, faTrashRestore, faUser } from '@fortawesome/free-solid-svg-icons'; 
 import { Filters } from '../sections/pending/Filters.js';
 
 export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
@@ -196,8 +196,8 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
                 )}
 
                 {pendingBookings.length > 0 && <div className="pending_header">
-                    <span className={`pending_header_span phs1 ${sort == 0 && 'phs_sorted1'}`}>Time</span>
-                    <span className={`pending_header_span phs2 ${sort == 0 && 'phs_sorted2'}`}>Service</span>
+                    <span className={`pending_header_span phs1 ${sort === 0 && 'phs_sorted1'}`}>Time</span>
+                    <span className={`pending_header_span phs2 ${sort === 0 && 'phs_sorted2'}`}>Service</span>
                     <span className="pending_header_span phs3">Customer</span>
                     <span className="pending_header_span phs4">Ref.</span>
                     <span className="pending_header_span phs5">Action</span>
@@ -213,7 +213,7 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
                             <div className='pending_section_inner'>
                                 {groupedBookings[groupKey].map((booking) => (
                                     <div key={booking.bookingId} className="pending_booking">
-                                        <div className={`pending_booking_inner pbi1 ${sort == 0 && 'pbi_sorted1'}`}>
+                                        <div className={`pending_booking_inner pbi1 ${sort === 0 && 'pbi_sorted1'}`}>
                                             <FontAwesomeIcon icon={faClock} className='pending_booking_time_icon'/>
                                             <p className='pending_booking_text'>
                                                 {sort === 1 && `${formatDate(booking.date)}, `}
@@ -221,7 +221,7 @@ export const Pending = ({ notif, setNotif, setNotifText, notifText }) => {
                                             </p>
                                         </div>
 
-                                        <div className={`pending_booking_inner pbi2 ${sort == 0 && 'pbi_sorted2'}`}>
+                                        <div className={`pending_booking_inner pbi2 ${sort === 0 && 'pbi_sorted2'}`}>
                                             {isMobileView && <FontAwesomeIcon icon={faClipboard} className='pending_booking_mobile_icon'/>}
                                             {sort === 0 && (
                                                 <span className={`pending_booking_employee_initial ${booking.employee === 'Bobby' ? 'pbei_bobby' : ''} ${booking.employee === 'Tommy' ? 'pbei_tommy' : ''} ${booking.employee === 'Jasmine' ? 'pbei_jasmine' : ''} ${booking.employee === 'Harry' ? 'pbei_harry' : ''}`}>
